@@ -1,0 +1,96 @@
+{
+    "dataset": {
+        "name": "exmaple_beer",
+        "task": "detection",
+        "format": "yolo",
+        "sets": [
+            {
+                "name": "train",
+                "size": 8000
+            },
+            {
+                "name": "valid",
+                "size": 2000
+            },
+            {
+                "name": "test",
+                "size": 1000
+            }
+        ]
+    },
+    "render": {
+        "engine": "cycles",
+        "samples": 1024,
+        "denoising": true,
+        "resolution": [512, 512]
+    },
+    "scene": {
+        "path": "assets/example_beer/scenes/scene-001.blend",
+        "camera_object_name": "camera"
+    },
+    "hdrs": {
+        "registered": [
+            {
+              "path": "assets/example_beer/hdrs/factory-interior-001.exr",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/hdrs/field-exterior-001.hdr",
+              "relative_frequency": 10
+            }
+          ]
+    },
+    "backgrounds": {
+        "background_object_name": "background",
+        "registered": [
+            {
+              "path": "assets/example_beer/backgrounds/factory-001.png",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/backgrounds/factory-002.png",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/backgrounds/factory-003.png",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/backgrounds/factory-004.png",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/backgrounds/factory-005.png",
+              "relative_frequency": 1
+            },
+            {
+              "path": "assets/example_beer/backgrounds/factory-006.png",
+              "relative_frequency": 1
+            }
+          ]
+    },
+    "items": {
+        "path_object_name": "path",
+        "spawn_probability": 0.5,
+        "max_tries": 3,
+        "max_items": 5,
+        "registered": [
+            {
+                "path": "assets/example_beer/items/heineken-001.blend",
+                "label": "bottle-green-001",
+                "object_name": "heineken",
+                "relative_frequency": 1,
+                "min_margin_distance": 0.06,
+                "max_lateral_distance": 0
+            },
+            {
+                "path": "assets/example_beer/items/hertog-jan-001.blend",
+                "label": "bottle-brown-001",
+                "object_name": "hertog-jan",
+                "relative_frequency": 1,
+                "min_margin_distance": 0.06,
+                "max_lateral_distance": 0
+            }
+        ]
+    }
+}
