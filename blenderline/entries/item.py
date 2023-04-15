@@ -11,6 +11,8 @@ from blenderline.entries.base import BaseEntry
 # Item entry class
 ##########################################################################################
 class ItemEntry(BaseEntry):
+    """ Item entry. """
+
     def __init__(
         self,
         filepath: str | pathlib.Path,
@@ -20,7 +22,7 @@ class ItemEntry(BaseEntry):
         max_lateral_distance: float,
         relative_frequency: float = 1,
     ) -> None:
-        """ Registered item entry.
+        """ Create item entry.
 
         Args:
             filepath (str | pathlib.Path): absolute filepath to item .blend asset.

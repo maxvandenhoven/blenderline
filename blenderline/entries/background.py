@@ -11,12 +11,14 @@ from blenderline.entries.base import BaseEntry
 # Background entry class
 ##########################################################################################
 class BackgroundEntry(BaseEntry):
+    """ Background entry. """
+
     def __init__(
         self,
         filepath: str | pathlib.Path,
         relative_frequency: float = 1,
     ) -> None:
-        """ Registered background entry.
+        """ Create background entry.
 
         Args:
             filepath (str | pathlib.Path): absolute filepath to image asset.

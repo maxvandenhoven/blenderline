@@ -11,12 +11,14 @@ from blenderline.entries.base import BaseEntry
 # HDR entry class
 ##########################################################################################
 class HDREntry(BaseEntry):
+    """ HDR entry. """
+
     def __init__(
         self,
         filepath: str | pathlib.Path,
         relative_frequency: float = 1,
     ) -> None:
-        """ Registered HDR background entry.
+        """ Create HDR background entry.
 
         Args:
             filepath (str | pathlib.Path): absolute filepath to HDR asset.
