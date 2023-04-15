@@ -3,8 +3,10 @@
 ##########################################################################################
 import bpy
 import pathlib
+import secrets
 
 from blenderline.entries.base import BaseEntry
+from blenderline.references.item import ItemReference
 
 
 ##########################################################################################
@@ -42,3 +44,34 @@ class ItemEntry(BaseEntry):
         self.min_margin_distance = min_margin_distance
         self.max_lateral_distance = max_lateral_distance
         self.relative_frequency = relative_frequency
+
+
+    def spawn(self, location: tuple[float, float, float]) -> ItemReference:
+        """ Instantiate item object in the scene at a given location.
+
+        Args:
+            location (tuple[float, float, float]): location to spawn object at.
+
+        Returns:
+            ItemReference: reference to spawned item object.
+        """                
+        # Deselect everything in the scene to be safe.
+        bpy.ops.object.select_all(action='DESELECT')
+
+        # Add object to scene (added object will have name `self.object_name`)
+        bpy.ops.wm.append(
+            filepath=str(self.filepath),
+            directory=str(self.filepath / "Object"),
+            filename=self.object_name
+        )
+
+        # Generate random name for object in scene to prevent object name 
+        # collisions when multiple objects are added to the scene
+        scene_object_name = self.label + "__" + secrets.token_urlsafe(10)
+        
+        # Select spawned object and set proper name and location
+        obj = bpy.data.objects[self.object_name]
+        obj.name = scene_object_name
+        obj.location = location
+
+        return ItemReference(scene_object_name, self)
