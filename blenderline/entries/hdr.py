@@ -4,23 +4,23 @@
 import bpy
 import pathlib
 
-from .base import RegisteredBase, CollectionBase
+from blenderline.entries.base import BaseEntry
 
 
 ##########################################################################################
 # HDR registered object class
 ##########################################################################################
-class RegisteredHDR(RegisteredBase):
+class HDREntry(BaseEntry):
     def __init__(
         self,
         filepath: str | pathlib.Path,
         relative_frequency: float = 1,
     ) -> None:
-        """ Registered HDR background.
+        """ Registered HDR background entry.
 
         Args:
-            filepath (str | pathlib.Path): Absolute filepath to HDR asset.
-            relative_frequency (float, optional): Relative frequency with which to sample. 
+            filepath (str | pathlib.Path): absolute filepath to HDR asset.
+            relative_frequency (float, optional): relative frequency with which to sample. 
                 Defaults to 1.
         """           
         # Save object attributes.
@@ -64,11 +64,3 @@ class RegisteredHDR(RegisteredBase):
             input=background_node.outputs["Background"],
             output=output_node.inputs["Surface"],
         )
-
-
-##########################################################################################
-# HDR collection class
-##########################################################################################
-class HDRCollection(CollectionBase[RegisteredHDR]):
-    """ Collection of registered HDR backgrounds. """
-    pass

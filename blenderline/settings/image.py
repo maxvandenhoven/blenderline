@@ -4,8 +4,8 @@
 import json
 import pathlib
 
-from blenderline.collections.hdrs import RegisteredHDR, HDRCollection
-from blenderline.collections.backgrounds import RegisteredBackground, BackgroundCollection
+from blenderline.entries import BackgroundEntry, HDREntry
+from blenderline.collections import BackgroundCollection, HDRCollection
 
 
 ##########################################################################################
@@ -38,7 +38,7 @@ class ImageGenerationSettings:
         hdr_collection = HDRCollection()
 
         # Get list of registered HDR dictionaries, defaulting to empty list if not given.
-        hdrs: list[dict] = self.settings.get("hdrs", {}).get("registered", [])
+        hdrs: list[dict] = self.settings.get("hdrs", {}).get("entries", [])
 
         for hdr in hdrs:
             # Validate registered HDR dict by checking for a relative filepath.
@@ -46,7 +46,7 @@ class ImageGenerationSettings:
                 raise Exception("Configure path to HDR asset")
             
             # Build registered HDR object from dict and register it to the collection.
-            hdr_collection.register(RegisteredHDR(
+            hdr_collection.register(HDREntry(
                 filepath=self.base_dir / hdr["path"],
                 relative_freq=hdr.get("relative_frequency", 1)
             ))
@@ -63,7 +63,7 @@ class ImageGenerationSettings:
         background_collection = BackgroundCollection()
 
         # Get list of registered background dictionaries, defaulting to empty list if not given.   
-        backgrounds: list[dict] = self.settings.get("backgrounds", {}).get("registered", []) 
+        backgrounds: list[dict] = self.settings.get("backgrounds", {}).get("entries", []) 
 
         for background in backgrounds:
             # Validate registered HDR dict by checking for a relative filepath.
@@ -71,7 +71,7 @@ class ImageGenerationSettings:
                 raise Exception("Configure path to background asset")
             
             # Build registered HDR object from dict and register it to the collection.
-            background_collection.register(RegisteredBackground(
+            background_collection.register(BackgroundEntry(
                 filepath=self.base_dir / background["path"],
                 relative_freq=background.get("relative_frequency", 1)
             ))

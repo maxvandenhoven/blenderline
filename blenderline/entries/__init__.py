@@ -1,5 +1,5 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-from .background import BackgroundCollection
-from .hdr import HDRCollection
+from .background import BackgroundEntry
+from .hdr import HDREntry

@@ -4,23 +4,23 @@
 import bpy
 import pathlib
 
-from .base import RegisteredBase, CollectionBase
+from blenderline.entries.base import BaseEntry
 
 
 ##########################################################################################
 # Background registered object class
 ##########################################################################################
-class RegisteredBackground(RegisteredBase):
+class BackgroundEntry(BaseEntry):
     def __init__(
         self,
         filepath: str | pathlib.Path,
         relative_frequency: float = 1,
     ) -> None:
-        """ Class to store registered backgrounds.
+        """ Registered background entry.
 
         Args:
-            filepath (str | pathlib.Path): Absolute filepath to image asset.
-            relative_frequency (float, optional): Relative frequency with which to sample. 
+            filepath (str | pathlib.Path): absolute filepath to image asset.
+            relative_frequency (float, optional): relative frequency with which to sample. 
                 Defaults to 1.
         """           
         # Save object attributes.
@@ -32,7 +32,7 @@ class RegisteredBackground(RegisteredBase):
         """ Apply background image to background object.
 
         Args:
-            background_object_name (str): Name of object to apply background to.
+            background_object_name (str): name of object to apply background to.
         """               
         # Get background object.
         background_obj = bpy.data.objects[background_object_name]
@@ -71,11 +71,3 @@ class RegisteredBackground(RegisteredBase):
             input=bsdf_node.outputs["BSDF"],
             output=output_node.inputs["Surface"],
         )
-
-
-##########################################################################################
-# Background collection class
-##########################################################################################
-class BackgroundCollection(CollectionBase[RegisteredBackground]):
-    """ Collection of registered backgrounds. """
-    pass

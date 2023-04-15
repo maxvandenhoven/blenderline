@@ -3,56 +3,53 @@
 ##########################################################################################
 import random
 
-from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
+from blenderline.entries.base import BaseEntry
+
 
 ##########################################################################################
-# Base registered object class
+# Custom types
 ##########################################################################################
-class RegisteredBase(ABC):
-    @property
-    @abstractmethod
-    def relative_frequency(self) -> float:
-        """ Relative frequency of the object. """
+EntryType = TypeVar("EntryType", bound=BaseEntry)
 
 
 ##########################################################################################
 # Base collection class
 ##########################################################################################
-RegisteredType = TypeVar("RegisteredType", bound=RegisteredBase)
+class BaseCollection(Generic[EntryType]):
+    """ Base class for collections. """
 
-class CollectionBase(Generic[RegisteredType]):
     def __init__(self) -> None:
         """ Initialize empty collection. """
-        self.registered: list[RegisteredType] = []
+        self.entries: list[EntryType] = []
 
     
-    def register(self, obj: RegisteredType) -> None:
-        """ Register new object to collection.
+    def register(self, entry: EntryType) -> None:
+        """ Register new entry to collection.
 
         Args:
-            obj (RegisteredType): object to register to collection.
+            entry (EntryType): entry to register to the collection.
         """        
-        self.registered.append(obj)
+        self.entries.append(entry)
 
 
     @property
     def total_frequency(self) -> float:
-        """ Total frequency of all items in the collection.
+        """ Total frequency of all entries in the collection.
 
         Returns:
             float: total frequency.
         """        
-        return sum(obj.relative_frequency for obj in self.registered)
+        return sum(entry.relative_frequency for entry in self.entries)
 
 
-    def sample(self) -> RegisteredType:
-        """ Sample from registered objects according to computed probabilities.
+    def sample(self) -> EntryType:
+        """ Sample from registered entries according to computed probabilities.
 
         Returns:
-            RegisteredType: sampled registered object.
+            EntryType: sampled entry.
         """        
-        # Compute individual object sampling probabilities and sample accordingly.
-        weights = [obj.relative_frequency/self.total_frequency for obj in self.registered]
-        return random.choices(self.registered, weights=weights, k=1)[0]
+        # Compute individual entry sampling probabilities and sample accordingly.
+        weights = [entry.relative_frequency/self.total_frequency for entry in self.entries]
+        return random.choices(self.entries, weights=weights, k=1)[0]
