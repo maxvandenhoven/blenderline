@@ -62,7 +62,7 @@ class ImageGenerationSettings:
         """   
         background_collection = BackgroundCollection()
 
-        # Get list of registered background dictionaries, defaulting to empty list if not given.   
+        # Get list of registered background dictionaries, default to empty list if not given.   
         backgrounds: list[dict] = self.settings.get("backgrounds", {}).get("entries", []) 
 
         for background in backgrounds:
