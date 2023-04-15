@@ -8,7 +8,7 @@ from blenderline.entries.base import BaseEntry
 
 
 ##########################################################################################
-# Background registered object class
+# Background entry class
 ##########################################################################################
 class BackgroundEntry(BaseEntry):
     def __init__(

@@ -8,7 +8,7 @@ from blenderline.entries.base import BaseEntry
 
 
 ##########################################################################################
-# HDR registered object class
+# HDR entry class
 ##########################################################################################
 class HDREntry(BaseEntry):
     def __init__(
