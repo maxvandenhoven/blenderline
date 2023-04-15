@@ -5,6 +5,7 @@ import json
 import pathlib
 
 from blenderline.collections.hdrs import RegisteredHDR, HDRCollection
+from blenderline.collections.backgrounds import RegisteredBackground, BackgroundCollection
 
 
 ##########################################################################################
@@ -51,3 +52,29 @@ class ImageGenerationSettings:
             ))
 
         return hdr_collection
+    
+
+    def get_background_collection(self) -> BackgroundCollection:
+        """ Create background collection from registered backgrounds in settings.
+
+        Returns:
+            BackgroundCollection: collection of backgrounds.
+        """   
+        background_collection = BackgroundCollection()
+
+        # Get list of registered background dictionaries, defaulting to empty list if not given.   
+        backgrounds: list[dict] = self.settings.get("backgrounds", {}).get("registered", []) 
+
+        for background in backgrounds:
+            # Validate registered HDR dict by checking for a relative filepath.
+            if "path" not in background:
+                raise Exception("Configure path to background asset")
+            
+            # Build registered HDR object from dict and register it to the collection.
+            background_collection.register(RegisteredBackground(
+                filepath=self.base_dir / background["path"],
+                relative_freq=background.get("relative_frequency", 1)
+            ))
+
+        return background_collection 
+    
