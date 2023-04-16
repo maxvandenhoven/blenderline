@@ -15,13 +15,13 @@ class HDREntry(BaseEntry):
 
     def __init__(
         self,
-        filepath: str | pathlib.Path,
+        filepath: str,
         relative_frequency: float = 1,
     ) -> None:
         """ Create HDR background entry.
 
         Args:
-            filepath (str | pathlib.Path): absolute filepath to HDR asset.
+            filepath (str): absolute filepath to HDR asset.
             relative_frequency (float, optional): relative frequency with which to sample. 
                 Defaults to 1.
         """           

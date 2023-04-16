@@ -6,6 +6,7 @@ import pathlib
 
 from blenderline.entries import BackgroundEntry, HDREntry
 from blenderline.collections import BackgroundCollection, HDRCollection
+from blenderline.managers import SceneManager
 
 
 ##########################################################################################
@@ -27,7 +28,36 @@ class ImageGenerationSettings:
         self.base_dir = base_dir
         with open(filepath, mode="rt", encoding="utf-8") as file:
             self.settings: dict = json.load(file)
-    
+
+
+    def get(self, key: str, default = None):
+        """ Get nested value from settings dictionary using dot notation to specify
+            a path of keys to follow. E.g., "scene.path". Intermediate keys will return
+            an empty dictionary of not present, so the function will always follow the
+            entire key path.
+
+        Args:
+            key (str): dot-separated path of keys to follow
+            default (_type_, optional): default value to return if key does not exist. 
+                Note that this is also triggered if an intermediary key is not present.
+                Defaults to None.
+        """        
+        parts = key.split(".")
+
+        # If only one key, perform normal dictionary get on settings dictionary.
+        if len(parts) == 1:
+            return self.settings.get(parts[0], default)
+        # If two keys, get first key first with empty dictionary as default.
+        elif len(parts) == 2:
+            return self.settings.get(parts[0], {}).get(parts[1], default)
+        # For more than three keys (n), get the first n-1 keys with an empty dictionary
+        # as default value.
+        else:
+            current_dict = self.settings
+            for part in parts[:-1]:
+                current_dict = current_dict.get(part, {})
+            return current_dict.get(parts[-1], default)
+
 
     def get_hdr_collection(self) -> HDRCollection:
         """ Create HDR collection from registered HDR backgrounds in settings.
@@ -37,8 +67,8 @@ class ImageGenerationSettings:
         """        
         hdr_collection = HDRCollection()
 
-        # Get list of registered HDR dictionaries, defaulting to empty list if not given.
-        hdrs: list[dict] = self.settings.get("hdrs", {}).get("entries", [])
+        # Get list of registered HDR dictionaries.
+        hdrs: list[dict] = self.get("hdrs.entries", [])
 
         for hdr in hdrs:
             # Validate registered HDR dict by checking for a relative filepath.
@@ -46,10 +76,12 @@ class ImageGenerationSettings:
                 raise Exception("Configure path to HDR asset")
             
             # Build registered HDR object from dict and register it to the collection.
-            hdr_collection.register(HDREntry(
-                filepath=self.base_dir / hdr["path"],
-                relative_freq=hdr.get("relative_frequency", 1)
-            ))
+            hdr_collection.register(
+                HDREntry(
+                    filepath=str(self.base_dir / hdr["path"]),
+                    relative_freq=hdr.get("relative_frequency", 1)
+                )
+            )
 
         return hdr_collection
     
@@ -62,8 +94,8 @@ class ImageGenerationSettings:
         """   
         background_collection = BackgroundCollection()
 
-        # Get list of registered background dictionaries, default to empty list if not given.   
-        backgrounds: list[dict] = self.settings.get("backgrounds", {}).get("entries", []) 
+        # Get list of registered background dictionaries.   
+        backgrounds: list[dict] = self.get("backgrounds.entries", []) 
 
         for background in backgrounds:
             # Validate registered HDR dict by checking for a relative filepath.
@@ -71,10 +103,36 @@ class ImageGenerationSettings:
                 raise Exception("Configure path to background asset")
             
             # Build registered HDR object from dict and register it to the collection.
-            background_collection.register(BackgroundEntry(
-                filepath=self.base_dir / background["path"],
-                relative_freq=background.get("relative_frequency", 1)
-            ))
+            background_collection.register(
+                BackgroundEntry(
+                    filepath=str(self.base_dir / background["path"]),
+                    relative_freq=background.get("relative_frequency", 1)
+                )
+            )
 
         return background_collection 
+    
+
+    def get_scene_manager(self) -> SceneManager:
+        """ Create scene manager using parameters configured in settings.
+
+        Returns:
+            SceneManager: scene manager object.
+        """        
+        # Validate scene settings by checking for a relative filepath.
+        if not self.get("scene.path"):
+            raise Exception("Configure path to scene asset")
+
+        # Return scene manager with specified parameters, falling back to defaults if not
+        # specified.
+        return SceneManager(
+            filepath=str(self.base_dir / self.settings["scene"]["path"]),
+            camera_object_name=self.get("scene.camera_object_name", "camera"),
+            render_samples=self.get("scene.render_samples", 1024),
+            render_denoising=self.get("scene.render_denoising", True),
+            render_resolution=self.get("scene.render_resolution", [512, 512]),
+        )
+        
+
+        
     

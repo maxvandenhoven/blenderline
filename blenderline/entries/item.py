@@ -17,7 +17,7 @@ class ItemEntry(BaseEntry):
 
     def __init__(
         self,
-        filepath: str | pathlib.Path,
+        filepath: str,
         label: str,
         object_name: str,
         min_margin_distance: float,
@@ -27,7 +27,7 @@ class ItemEntry(BaseEntry):
         """ Create item entry.
 
         Args:
-            filepath (str | pathlib.Path): absolute filepath to item .blend asset.
+            filepath (str): absolute filepath to item .blend asset.
             label (str): label category of object.
             object_name (str): name of object in item .blend file.
             min_margin_distance (float): minimum distance (in Blender units) other items
