@@ -4,8 +4,8 @@
 import json
 import pathlib
 
-from blenderline.entries import BackgroundEntry, HDREntry
-from blenderline.collections import BackgroundCollection, HDRCollection
+from blenderline.entries import BackgroundEntry, HDREntry, ItemEntry
+from blenderline.collections import BackgroundCollection, HDRCollection, ItemCollection
 from blenderline.managers import SceneManager
 
 
@@ -113,6 +113,46 @@ class ImageGenerationSettings:
         return background_collection 
     
 
+    def get_item_collection(self) -> ItemCollection:
+        """ Create item collection from registered items in settings.
+
+        Returns:
+            ItemCollection: collection of items.
+        """       
+        item_collection = ItemCollection()
+
+        # Get list of registered item dictionaries.
+        items: list[dict] = self.get("ites.entries", [])
+
+        for item in items:
+            # Validate registered item dict by checking for a relative filepath, label,
+            # object name and margin.
+            if "path" not in item:
+                raise Exception("Configure path to item asset")
+            if "label" not in item:
+                raise Exception("Configure item label")
+            if "object_name" not in item:
+                raise Exception("Configure name of object in .blend file")
+            if "min_margin_distance" not in item:
+                raise Exception("Configure minimum distance to other items")
+            if "max_lateral_distance" not in item:
+                raise Exception("Configure maximum distance from path center line")
+            
+            # Build registered HDR object from dict and register it to the collection.
+            item_collection.register(
+                BackgroundEntry(
+                    filepath=str(self.base_dir / item["path"]),
+                    label=item["label"],
+                    object_name=item["object_name"],
+                    min_margin_distance=item["min_margin_distance"],
+                    max_lateral_distance=item["max_lateral_distance"],
+                    relative_freq=item.get("relative_frequency", 1)
+                )
+            )
+
+        return item_collection 
+
+    
     def get_scene_manager(self) -> SceneManager:
         """ Create scene manager using parameters configured in settings.
 
