@@ -1,6 +1,6 @@
 {
   "dataset": {
-    "name": "exmaple_beer",
+    "name": "example_beer",
     "task": "detection",
     "format": "yolo",
     "sets": [
