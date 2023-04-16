@@ -18,18 +18,16 @@
       }
     ]
   },
-  "render": {
-    "engine": "cycles",
-    "samples": 1024,
-    "denoising": true,
-    "resolution": [
+  "scene": {
+    "path": "assets/example_beer/scenes/scene-001.blend",
+    "camera_object_name": "camera",
+    "render_engine": "cycles",
+    "render_samples": 1024,
+    "render_denoising": true,
+    "render_resolution": [
       512,
       512
     ]
-  },
-  "scene": {
-    "path": "assets/example_beer/scenes/scene-001.blend",
-    "camera_object_name": "camera"
   },
   "hdrs": {
     "entries": [
