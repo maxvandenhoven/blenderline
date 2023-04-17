@@ -1,8 +1,8 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-from blenderline.entries.hdr import HDREntry
 from blenderline.collections.base import BaseCollection
+from blenderline.entries.hdr import HDREntry
 
 
 ##########################################################################################

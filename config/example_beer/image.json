@@ -22,6 +22,7 @@
     "path": "assets/example_beer/scenes/scene-001.blend",
     "camera_object_name": "camera",
     "render_samples": 1024,
+    "render_use_cuda": true,
     "render_denoising": true,
     "render_resolution": [
       512,

@@ -2,11 +2,9 @@
 # Imports
 ##########################################################################################
 import random
-
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from blenderline.entries.base import BaseEntry
-
 
 ##########################################################################################
 # Custom types

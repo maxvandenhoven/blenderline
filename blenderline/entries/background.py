@@ -1,8 +1,9 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-import bpy
 import pathlib
+
+import bpy
 
 from blenderline.entries.base import BaseEntry
 
@@ -15,32 +16,28 @@ class BackgroundEntry(BaseEntry):
 
     def __init__(
         self,
-        filepath: str,
-        relative_frequency: float = 1,
+        filepath: pathlib.Path,
+        relative_frequency: float
     ) -> None:
         """ Create background entry.
 
         Args:
-            filepath (str): absolute filepath to image asset.
-            relative_frequency (float, optional): relative frequency with which to sample. 
-                Defaults to 1.
+            filepath (pathlib.Path): absolute filepath to image asset.
+            relative_frequency (float): relative frequency with which to sample.
         """           
         # Save object attributes.
         self.filepath = filepath
         self.relative_frequency = relative_frequency
 
 
-    def set(self, background_object_name: str) -> None:
+    def set(self, background_object: bpy.types.Object) -> None:
         """ Apply background image to background object.
 
         Args:
-            background_object_name (str): name of object to apply background to.
+            background_object (bpy.types.Object): object to apply background to.
         """               
-        # Get background object.
-        background_obj = bpy.data.objects[background_object_name]
-
         # Get active material node tree.
-        node_tree = background_obj.active_material.node_tree
+        node_tree = background_object.active_material.node_tree
         nodes = node_tree.nodes
 
         # Clear all nodes.

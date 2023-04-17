@@ -1,8 +1,9 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-import bpy
 import pathlib
+
+import bpy
 
 from blenderline.entries.base import BaseEntry
 
@@ -15,29 +16,31 @@ class HDREntry(BaseEntry):
 
     def __init__(
         self,
-        filepath: str,
-        relative_frequency: float = 1,
+        filepath: pathlib.Path,
+        relative_frequency: float,
     ) -> None:
         """ Create HDR background entry.
 
         Args:
-            filepath (str): absolute filepath to HDR asset.
-            relative_frequency (float, optional): relative frequency with which to sample. 
-                Defaults to 1.
+            filepath (pathlib.Path): absolute filepath to HDR asset.
+            relative_frequency (float): relative frequency with which to sample.
         """           
         # Save object attributes.
         self.filepath = filepath
         self.relative_frequency = relative_frequency
 
 
-    def set(self) -> None:
+    def set(self, world: bpy.types.World) -> None:
         """ Set HDR as environment background.
+
+        Args:
+            world (bpy.types.World): world object to apply background to.
         
         Sources:
             - https://blender.stackexchange.com/a/209633
         """        
-        # Get environment node tree of current scene.
-        node_tree = bpy.context.scene.world.node_tree
+        # Get environment node tree of world.
+        node_tree = world.node_tree
         nodes = node_tree.nodes
 
         # Clear all nodes.

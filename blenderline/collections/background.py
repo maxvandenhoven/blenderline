@@ -1,8 +1,8 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-from blenderline.entries.background import BackgroundEntry
 from blenderline.collections.base import BaseCollection
+from blenderline.entries.background import BackgroundEntry
 
 
 ##########################################################################################

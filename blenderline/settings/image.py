@@ -4,9 +4,10 @@
 import json
 import pathlib
 
+from blenderline.collections import (BackgroundCollection, HDRCollection,
+                                     ItemCollection)
 from blenderline.entries import BackgroundEntry, HDREntry, ItemEntry
-from blenderline.collections import BackgroundCollection, HDRCollection, ItemCollection
-from blenderline.managers import SceneManager
+from blenderline.managers import BackgroundManager, HDRManager, SceneManager
 
 
 ##########################################################################################
@@ -78,8 +79,8 @@ class ImageGenerationSettings:
             # Build registered HDR object from dict and register it to the collection.
             hdr_collection.register(
                 HDREntry(
-                    filepath=str(self.base_dir / hdr["path"]),
-                    relative_freq=hdr.get("relative_frequency", 1)
+                    filepath=self.base_dir / hdr["path"],
+                    relative_frequency=hdr.get("relative_frequency", 1)
                 )
             )
 
@@ -105,8 +106,8 @@ class ImageGenerationSettings:
             # Build registered HDR object from dict and register it to the collection.
             background_collection.register(
                 BackgroundEntry(
-                    filepath=str(self.base_dir / background["path"]),
-                    relative_freq=background.get("relative_frequency", 1)
+                    filepath=self.base_dir / background["path"],
+                    relative_frequency=background.get("relative_frequency", 1)
                 )
             )
 
@@ -122,7 +123,7 @@ class ImageGenerationSettings:
         item_collection = ItemCollection()
 
         # Get list of registered item dictionaries.
-        items: list[dict] = self.get("ites.entries", [])
+        items: list[dict] = self.get("items.entries", [])
 
         for item in items:
             # Validate registered item dict by checking for a relative filepath, label,
@@ -140,13 +141,13 @@ class ImageGenerationSettings:
             
             # Build registered HDR object from dict and register it to the collection.
             item_collection.register(
-                BackgroundEntry(
-                    filepath=str(self.base_dir / item["path"]),
+                ItemEntry(
+                    filepath=self.base_dir / item["path"],
                     label=item["label"],
                     object_name=item["object_name"],
                     min_margin_distance=item["min_margin_distance"],
                     max_lateral_distance=item["max_lateral_distance"],
-                    relative_freq=item.get("relative_frequency", 1)
+                    relative_frequency=item.get("relative_frequency", 1)
                 )
             )
 
@@ -166,13 +167,33 @@ class ImageGenerationSettings:
         # Return scene manager with specified parameters, falling back to defaults if not
         # specified.
         return SceneManager(
-            filepath=str(self.base_dir / self.settings["scene"]["path"]),
+            filepath=self.base_dir / self.settings["scene"]["path"],
             camera_object_name=self.get("scene.camera_object_name", "camera"),
             render_samples=self.get("scene.render_samples", 1024),
+            render_use_cuda=self.get("scene.render_use_cuda", False),
             render_denoising=self.get("scene.render_denoising", True),
             render_resolution=self.get("scene.render_resolution", [512, 512]),
         )
-        
-
-        
     
+
+    def get_hdr_manager(self) -> HDRManager:
+        """ Create HDR background manager using parameters configured in settings.
+
+        Returns:
+            HDRManager: HDR manager object.
+        """        
+        return HDRManager(
+            hdr_collection=self.get_hdr_collection()
+        )
+    
+
+    def get_background_manager(self) -> BackgroundManager:
+        """ Create background manager using parameters configured in settings.
+
+        Returns:
+            BackgroundManager: Background manager object.
+        """        
+        return BackgroundManager(
+            background_object_name=self.get("scene.background_object_name", "background"),
+            background_collection=self.get_background_collection()
+        )

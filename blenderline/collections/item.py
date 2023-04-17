@@ -1,8 +1,8 @@
 ##########################################################################################
 # Imports
 ##########################################################################################
-from blenderline.entries.item import ItemEntry
 from blenderline.collections.base import BaseCollection
+from blenderline.entries.item import ItemEntry
 
 
 ##########################################################################################
