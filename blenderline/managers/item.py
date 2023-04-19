@@ -46,3 +46,7 @@ class ItemManager:
         # Get path object by name and wrap it in a path reference object.
         path_object = bpy.data.objects[self.path_object_name]
         self.path_reference = PathReference(path_object)
+
+        # Create collection in which spawned items are placed for easy tracking
+        self.scene_item_collection = bpy.data.collections.new("items")
+        bpy.context.scene.collection.children.link(self.scene_item_collection)

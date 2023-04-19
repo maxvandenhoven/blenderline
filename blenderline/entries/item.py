@@ -55,9 +55,7 @@ class ItemEntry(BaseEntry):
         Returns:
             ItemReference: reference to spawned item object.
         """
-        item_collection = bpy.data.collections.new("items")
-        bpy.context.scene.collection.children.link(item_collection)
-        item_collection = bpy.data.collections["items"]
+        scene_item_collection = bpy.data.collections["items"]
 
         with bpy.data.libraries.load(str(self.filepath)) as (data_from, data_to):
             data_to.objects = [
@@ -68,7 +66,7 @@ class ItemEntry(BaseEntry):
 
         for object in data_to.objects:
             if object is not None:
-                item_collection.objects.link(object)
+                scene_item_collection.objects.link(object)
 
         # Generate random name for object in scene to prevent object name 
         # collisions when multiple objects are added to the scene

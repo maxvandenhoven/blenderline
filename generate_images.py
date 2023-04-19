@@ -32,10 +32,33 @@ def main() -> None:
 
 
     item_manager = settings.get_item_manager()
+    item_manager.initialize()
 
     item_1 = item_manager.item_collection.sample().spawn((0, 0, 0))
     item_2 = item_manager.item_collection.sample().spawn((0.24, 0, 0))
     item_3 = item_manager.item_collection.sample().spawn((-0.24, 0, 0))
+
+    import bpy
+
+    for i in range(100):
+        location, normal_global_xy, normal_local_z = item_manager.path_reference.sample()
+        point1 = location
+        point2 = location + normal_local_z*0.1
+
+        # Create a new mesh object
+        mesh = bpy.data.meshes.new("Line")
+        obj = bpy.data.objects.new("Line", mesh)
+        bpy.context.collection.objects.link(obj)
+
+        # Create a vertex list
+        vertices = [point1, point2]
+
+        # Create a mesh from the vertex list
+        edges = []
+        faces = []
+        mesh.from_pydata(vertices, edges, faces)
+
+        mesh.update()
 
 
 if __name__ == "__main__":
