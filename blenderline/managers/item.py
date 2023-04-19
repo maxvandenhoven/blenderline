@@ -4,6 +4,7 @@
 import bpy
 
 from blenderline.collections import ItemCollection
+from blenderline.references import PathReference
 
 
 ##########################################################################################
@@ -44,4 +45,4 @@ class ItemManager:
         """ Get path reference object. """
         # Get path object by name and wrap it in a path reference object.
         path_object = bpy.data.objects[self.path_object_name]
-        # TODO: create and wrap PathReference
+        self.path_reference = PathReference(path_object)

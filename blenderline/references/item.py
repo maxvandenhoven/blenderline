@@ -18,7 +18,7 @@ class ItemReference:
         """ Create reference to item object in scene.
 
         Args:
-            object_name (str): name of object in scene.
+            object_name (str): item object in scene.
             reference_entry (ItemEntry): entry used to create referenced object.
         """        
         # Save object attributes
