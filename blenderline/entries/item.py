@@ -75,8 +75,8 @@ class ItemEntry(BaseEntry):
         scene_object_name = self.label + "__" + secrets.token_urlsafe(10)
         
         # Select spawned object and set proper name and location
-        obj = bpy.data.objects[self.object_name]
-        obj.name = scene_object_name
-        obj.location = location
+        item_object = bpy.data.objects[self.object_name]
+        item_object.name = scene_object_name
+        item_object.location = location
 
-        return ItemReference(scene_object_name, self)
+        return ItemReference(item_object, self)

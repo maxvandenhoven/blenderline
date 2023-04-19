@@ -1,4 +1,10 @@
 ##########################################################################################
+# Imports
+##########################################################################################
+import bpy
+
+
+##########################################################################################
 # Item reference class
 ##########################################################################################
 class ItemReference:
@@ -6,7 +12,7 @@ class ItemReference:
 
     def __init__(
         self,
-        object_name: str,
+        item_object: bpy.types.Object,
         reference_entry, # No type hint to prevent circular import
     ) -> None:
         """ Create reference to item object in scene.
@@ -16,5 +22,5 @@ class ItemReference:
             reference_entry (ItemEntry): entry used to create referenced object.
         """        
         # Save object attributes
-        self.object_name = object_name
+        self.item_object = item_object
         self.reference_entry = reference_entry
