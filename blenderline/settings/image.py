@@ -4,10 +4,9 @@
 import json
 import pathlib
 
-from blenderline.collections import (BackgroundCollection, HDRCollection,
-                                     ItemCollection)
+from blenderline.collections import BackgroundCollection, HDRCollection, ItemCollection
 from blenderline.entries import BackgroundEntry, HDREntry, ItemEntry
-from blenderline.managers import BackgroundManager, HDRManager, SceneManager
+from blenderline.managers import BackgroundManager, HDRManager, SceneManager, ItemManager
 
 
 ##########################################################################################
@@ -191,9 +190,24 @@ class ImageGenerationSettings:
         """ Create background manager using parameters configured in settings.
 
         Returns:
-            BackgroundManager: Background manager object.
+            BackgroundManager: background manager object.
         """        
         return BackgroundManager(
             background_object_name=self.get("scene.background_object_name", "background"),
             background_collection=self.get_background_collection()
+        )
+    
+
+    def get_item_manager(self) -> ItemManager:
+        """ Create item manager using parameters configured in settings.
+
+        Returns:
+            ItemManager: item manager object.
+        """
+        return ItemManager(
+            path_object_name=self.get("items.path_object_name", "path"),
+            spawn_probability=self.get("items.spawn_probability", 0.5),
+            max_tries=self.get("items.max_tries", 3),
+            max_items=self.get("items.max_items", 5),
+            item_collection=self.get_item_collection()
         )

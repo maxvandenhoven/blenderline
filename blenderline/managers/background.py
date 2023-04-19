@@ -19,7 +19,7 @@ class BackgroundManager:
         background_object_name: str, 
         background_collection: BackgroundCollection
     ) -> None:
-        """ Create backgorund manager.
+        """ Create background manager.
 
         Args:
             background_object_name (str): name of background object in scene.
