@@ -72,9 +72,9 @@
   },
   "items": {
     "path_object_name": "path",
-    "spawn_probability": 0.5,
-    "max_tries": 3,
-    "max_items": 5,
+    "spawn_probability": 0.9,
+    "max_tries": 10,
+    "max_items": 10,
     "entries": [
       {
         "path": "assets/example_beer/items/heineken-001.blend",
