@@ -8,14 +8,14 @@ import sys
 base_dir = pathlib.Path(__file__).parent
 sys.path.append(str(base_dir))
 
-from blenderline.settings import ImageGenerationSettings
+from blenderline.settings import ImageDatasetSettings
 
 
 ##########################################################################################
 # Main script
 ##########################################################################################
 def main() -> None:
-    settings = ImageGenerationSettings(base_dir, "config/example_beer/image.json")
+    settings = ImageDatasetSettings(base_dir, "config/example_beer/image.json")
 
     # Initialize scene by loading scene assets and configuring camera
     scene_manager = settings.get_scene_manager()

@@ -12,7 +12,7 @@ from blenderline.managers import BackgroundManager, HDRManager, SceneManager, It
 ##########################################################################################
 # Settings object
 ##########################################################################################
-class ImageGenerationSettings:
+class ImageDatasetSettings:
     def __init__(
         self, 
         base_dir: str | pathlib.Path, 
