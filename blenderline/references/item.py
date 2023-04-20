@@ -31,6 +31,15 @@ class ItemReference:
         self.item_object.rotation_mode = 'QUATERNION'
 
 
+    def set_pass_index(self, pass_index: int) -> None:
+        """ Set pass index of object. 
+
+        Args:
+            pass_index (int): pass index to set on object. Must be between 0 and 255.
+        """        
+        self.item_object.pass_index = pass_index
+
+
     def orient_to_vector(self, desired_orientation: mathutils.Vector) -> None:
         """ Rotate object so that orientation (object local z axis) aligns with desired
             direction.

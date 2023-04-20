@@ -139,3 +139,15 @@ class ItemManager:
             else:
                 # Increment counter if sampled location is not valid.
                 tries += 1
+
+    
+    def assign_pass_indices(self) -> None:
+        """ Assign equispaced pass indices to all currently spawned items. """
+        # Determine gap between consecutive pass indices based on number of spawned items.
+        # Pass indices are evenly spaced in the range 0 to 255        
+        num_spawned_items = len(self.item_references)
+        pass_index_gap = int(255 / (num_spawned_items + 1))
+
+        # Set pass index on every spawned item.
+        for i, item_reference in enumerate(self.item_references):
+            item_reference.set_pass_index((i + 1)*pass_index_gap)

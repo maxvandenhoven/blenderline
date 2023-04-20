@@ -34,6 +34,7 @@ def main() -> None:
     item_manager = settings.get_item_manager()
     item_manager.initialize()
     item_manager.sample()
+    item_manager.assign_pass_indices()
 
 
 if __name__ == "__main__":
