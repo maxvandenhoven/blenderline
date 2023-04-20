@@ -36,6 +36,8 @@ def main() -> None:
     item_manager.sample()
     item_manager.assign_pass_indices()
 
+    scene_manager.render(pathlib.Path.home() / "Desktop")
+
 
 if __name__ == "__main__":
     main()

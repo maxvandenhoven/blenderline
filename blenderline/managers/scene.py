@@ -48,6 +48,7 @@ class SceneManager:
         """
         self._load_scene()
         self._configure_camera()
+        self._configure_render_settings()
 
 
     def _load_scene(self) -> None:
@@ -91,3 +92,64 @@ class SceneManager:
         bpy.context.scene.cycles.use_denoising = self.render_denoising
         bpy.context.scene.render.resolution_x = self.render_resolution[0]
         bpy.context.scene.render.resolution_y = self.render_resolution[1]
+
+
+    def _configure_render_settings(self) -> None:
+        """ Configure render settings. """
+        # Enable object pass indexin view layer.
+        bpy.context.scene.view_layers[0].use_pass_object_index = True
+
+        # Enable nodes on scene compositor and get node tree.
+        bpy.context.scene.use_nodes = True
+        node_tree = bpy.context.scene.node_tree
+        nodes = node_tree.nodes
+
+        # Clear all nodes.
+        nodes.clear()
+
+        # Add Render Layers node.
+        render_layers_node: bpy.types.CompositorNodeRLayers = nodes.new("CompositorNodeRLayers")
+        render_layers_node.location = (-300, 0)
+
+        # Add Divice node.
+        divide_node: bpy.types.CompositorNodeMath = nodes.new("CompositorNodeMath")
+        divide_node.operation = "DIVIDE"
+        divide_node.inputs[1].default_value = 255
+        divide_node.location = (0, -300)
+
+        # Add File Output node. Save node as instance attribute to change output path.
+        self.file_output_node: bpy.types.CompositorNodeOutputFile = nodes.new("CompositorNodeOutputFile")
+        self.file_output_node.file_slots.new("Segmentation")
+        self.file_output_node.format.color_mode = "RGB"
+        self.file_output_node.location = (300, 0)
+
+
+        # Link nodes.
+        links = node_tree.links
+        _ = links.new(
+            input=render_layers_node.outputs["Image"],
+            output=self.file_output_node.inputs["Image"],
+        )
+        _ = links.new(
+            input=render_layers_node.outputs["IndexOB"],
+            output=divide_node.inputs[0],
+        )
+        _ = links.new(
+            input=divide_node.outputs["Value"],
+            output=self.file_output_node.inputs["Segmentation"],
+        )
+
+
+    def render(self, output_folder: pathlib.Path) -> None:
+        """ Render image and segmentation mask to output folder.
+
+        Args:
+            output_folder (pathlib.Path): absolute filepath to desired output folder.
+        """        
+        # Set output folder on compositor nodes.
+        self.file_output_node.base_path = str(output_folder)
+
+        # Start render.
+        bpy.ops.render.render()
+
+        
