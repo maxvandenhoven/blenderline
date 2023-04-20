@@ -45,3 +45,30 @@ class ItemReference:
         # Apply rotation and update object orientation.
         self.item_object.rotation_quaternion = rotation_quaternion
         self.orientation = desired_orientation
+
+
+    def location_is_valid(
+        self, 
+        proposed_location: mathutils.Vector, 
+        proposed_min_margin_distance: float,
+    ) -> bool:
+        """ Check if a proposed location is far enough away from object, i.e., distance 
+            between the current object location and the proposed location is above the 
+            specified minimum margin distance defined on the reference item entry.
+
+        Args:
+            proposed_location (mathutils.Vector): proposed location for new item.
+            proposed_min_margin_distance (float): minimum margin distance for proposed item.
+
+        Returns:
+            bool: True if proposed location is valid w.r.t. this item.
+        """        
+        # Get location and minimum margin distance of spawned object
+        current_location: mathutils.Vector = self.item_object.location
+        current_min_margin_distance = self.reference_entry.min_margin_distance
+
+        # Compute distance between current spawned object and proposed location
+        distance = (current_location - proposed_location).length
+
+        # Check if distance satisfies both minimum margin distances
+        return distance > max(current_min_margin_distance, proposed_min_margin_distance) 

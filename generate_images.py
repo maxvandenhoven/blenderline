@@ -33,12 +33,7 @@ def main() -> None:
 
     item_manager = settings.get_item_manager()
     item_manager.initialize()
-
-    for _ in range(3):
-        location, normal_global_xy, normal_local_z = item_manager.path_reference.sample()
-        
-        item = item_manager.item_collection.sample().spawn(location)
-        item.orient_to_vector(normal_local_z)
+    item_manager.sample()
 
 
 if __name__ == "__main__":
