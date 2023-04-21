@@ -47,12 +47,14 @@ class HDREntry(BaseEntry):
         nodes.clear()
         
         # Add Environment Texture node.
-        environment_node = nodes.new("ShaderNodeTexEnvironment")
+        node: bpy.types.ShaderNodeTexEnvironment = nodes.new("ShaderNodeTexEnvironment")
+        environment_node = node
         environment_node.image = bpy.data.images.load(str(self.filepath))
         environment_node.location = (-300, 0)
 
         # Add Background node.
-        background_node = nodes.new("ShaderNodeBackground")
+        node: bpy.types.ShaderNodeBackground = nodes.new("ShaderNodeBackground")
+        background_node = node
         background_node.location = (0, 0)
 
         # Add Output node.

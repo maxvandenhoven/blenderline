@@ -5,6 +5,8 @@ import pathlib
 
 import bpy
 
+from blenderline.references import ItemReference
+
 
 ##########################################################################################
 # Scene manager class
@@ -46,12 +48,11 @@ class SceneManager:
         """ Initialize scene using specified parameters by loading scene and configuring 
             the camera. 
         """
-        self._load_scene()
-        self._configure_camera()
-        self._configure_render_settings()
+        self.load_scene()
+        self.configure_camera()
 
 
-    def _load_scene(self) -> None:
+    def load_scene(self) -> None:
         """ Load scene .blend file as main Blender file. """ 
         # Start with empty Blender file.
         bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -71,7 +72,7 @@ class SceneManager:
                 scene_collection.objects.link(object)
 
 
-    def _configure_camera(self) -> None:
+    def configure_camera(self) -> None:
         """ Configure active camera in scene. """
         # Get camera object and set it as active in the scene.
         camera_object = bpy.data.objects[self.camera_object_name]
@@ -94,60 +95,92 @@ class SceneManager:
         bpy.context.scene.render.resolution_y = self.render_resolution[1]
 
 
-    def _configure_render_settings(self) -> None:
+    def reset_compositor_nodes(self) -> None:
         """ Configure render settings. """
         # Enable object pass indexin view layer.
         bpy.context.scene.view_layers[0].use_pass_object_index = True
 
         # Enable nodes on scene compositor and get node tree.
         bpy.context.scene.use_nodes = True
-        node_tree = bpy.context.scene.node_tree
-        nodes = node_tree.nodes
+        self.node_tree = bpy.context.scene.node_tree
+        self.nodes = self.node_tree.nodes
 
         # Clear all nodes.
-        nodes.clear()
+        self.nodes.clear()
 
         # Add Render Layers node.
-        render_layers_node: bpy.types.CompositorNodeRLayers = nodes.new("CompositorNodeRLayers")
-        render_layers_node.location = (-300, 0)
-
-        # Add Divice node.
-        divide_node: bpy.types.CompositorNodeMath = nodes.new("CompositorNodeMath")
-        divide_node.operation = "DIVIDE"
-        divide_node.inputs[1].default_value = 255
-        divide_node.location = (0, -300)
+        node: bpy.types.CompositorNodeRLayers = self.nodes.new("CompositorNodeRLayers")
+        self.render_layers_node = node
+        self.render_layers_node.location = (-300, 0)
 
         # Add File Output node. Save node as instance attribute to change output path.
-        self.file_output_node: bpy.types.CompositorNodeOutputFile = nodes.new("CompositorNodeOutputFile")
-        self.file_output_node.file_slots.new("Segmentation")
+        node: bpy.types.CompositorNodeOutputFile = self.nodes.new("CompositorNodeOutputFile")
+        self.file_output_node = node
+        self.file_output_node.file_slots.remove(node.inputs["Image"])
+        self.file_output_node.file_slots.new("image__")
         self.file_output_node.format.color_mode = "RGB"
         self.file_output_node.location = (300, 0)
 
-
         # Link nodes.
-        links = node_tree.links
-        _ = links.new(
-            input=render_layers_node.outputs["Image"],
-            output=self.file_output_node.inputs["Image"],
-        )
-        _ = links.new(
-            input=render_layers_node.outputs["IndexOB"],
-            output=divide_node.inputs[0],
-        )
-        _ = links.new(
-            input=divide_node.outputs["Value"],
-            output=self.file_output_node.inputs["Segmentation"],
+        self.links = self.node_tree.links
+        _ = self.links.new(
+            input=self.render_layers_node.outputs["Image"],
+            output=self.file_output_node.inputs["image__"],
         )
 
 
-    def render(self, output_folder: pathlib.Path) -> None:
-        """ Render image and segmentation mask to output folder.
+    def add_item_reference_render_output(self, item_reference: ItemReference) -> None:
+        """ Add nodes to get segmentation mask corresponding to an item reference.
 
         Args:
-            output_folder (pathlib.Path): absolute filepath to desired output folder.
+            item_reference (ItemReference): item reference to generate mask output for.
         """        
-        # Set output folder on compositor nodes.
+        # Generate object segmentation mask output filename
+        mask_filename = item_reference.item_object.name + "__"
+
+        # Add output file for object segmentation mask to File Output node.
+        self.file_output_node.file_slots.new(mask_filename)
+
+        # Add ID Mask node.
+        node: bpy.types.CompositorNodeIDMask = self.nodes.new("CompositorNodeIDMask")
+        id_mask_node = node
+        id_mask_node.index = item_reference.pass_index
+        id_mask_node.use_antialiasing = True
+
+        # Link nodes.
+        _ = self.links.new(
+            input=self.render_layers_node.outputs["IndexOB"],
+            output=id_mask_node.inputs["ID value"],
+        )
+        _ = self.links.new(
+            input=id_mask_node.outputs["Alpha"],
+            output=self.file_output_node.inputs[mask_filename],
+        )
+
+
+    def render(
+        self, 
+        output_folder: pathlib.Path, 
+        item_references: list[ItemReference],
+    ) -> None:
+        """ Render current scene, outputting rendered image and all item segmentation 
+            masks. Rendered image will have filename "image__0001.png". Segmentation masks
+            will have filename "<label>__<random item ID>__0001.png".
+
+        Args:
+            output_folder (pathlib.Path): folder to store images in.
+            item_references (list[ItemReference]): list of item refereces to generate 
+                masks for.
+        """        
+        # Reset compositor nodes.
+        self.reset_compositor_nodes()
+
+        # Set output folder.
         self.file_output_node.base_path = str(output_folder)
+
+        # Add item references to segmentation mask outputs.
+        for item_reference in item_references:
+            self.add_item_reference_render_output(item_reference)
 
         # Start render.
         bpy.ops.render.render()

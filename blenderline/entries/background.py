@@ -44,16 +44,19 @@ class BackgroundEntry(BaseEntry):
         nodes.clear()
 
         # Add Texture Image node.
-        texture_node = nodes.new("ShaderNodeTexImage")
+        node: bpy.types.ShaderNodeTexImage = nodes.new("ShaderNodeTexImage") 
+        texture_node = node
         texture_node.image = bpy.data.images.load(str(self.filepath))
         texture_node.location = (-300, 0)
 
         # Add Principled BSDF node.
-        bsdf_node = nodes.new("ShaderNodeBsdfPrincipled")
+        node: bpy.types.ShaderNodeBsdfPrincipled = nodes.new("ShaderNodeBsdfPrincipled") 
+        bsdf_node = node
         bsdf_node.location = (0, 0)
 
         # Add Material Output node.
-        output_node = nodes.new("ShaderNodeOutputMaterial")
+        node: bpy.types.ShaderNodeOutputMaterial = nodes.new("ShaderNodeOutputMaterial") 
+        output_node = node
         output_node.location = (300, 0)
 
         # Link nodes.
