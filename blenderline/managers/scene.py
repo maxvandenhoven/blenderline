@@ -2,6 +2,7 @@
 # Imports
 ##########################################################################################
 import pathlib
+import secrets
 
 import bpy
 
@@ -113,11 +114,14 @@ class SceneManager:
         self.render_layers_node = node
         self.render_layers_node.location = (-300, 0)
 
+        # Generate random indentifier for image
+        image_filename = "image__" + secrets.token_hex(8) + "__"
+
         # Add File Output node. Save node as instance attribute to change output path.
         node: bpy.types.CompositorNodeOutputFile = self.nodes.new("CompositorNodeOutputFile")
         self.file_output_node = node
         self.file_output_node.file_slots.remove(node.inputs["Image"])
-        self.file_output_node.file_slots.new("image__")
+        self.file_output_node.file_slots.new(image_filename)
         self.file_output_node.format.color_mode = "RGB"
         self.file_output_node.location = (300, 0)
 
@@ -125,7 +129,7 @@ class SceneManager:
         self.links = self.node_tree.links
         _ = self.links.new(
             input=self.render_layers_node.outputs["Image"],
-            output=self.file_output_node.inputs["image__"],
+            output=self.file_output_node.inputs[image_filename],
         )
 
 
