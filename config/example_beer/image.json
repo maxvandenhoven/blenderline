@@ -1,20 +1,14 @@
 {
   "dataset": {
     "name": "example_beer",
-    "task": "detection",
-    "format": "yolo",
-    "sets": [
+    "splits": [
       {
         "name": "train",
-        "size": 8000
-      },
-      {
-        "name": "valid",
         "size": 2000
       },
       {
-        "name": "test",
-        "size": 1000
+        "name": "valid",
+        "size": 500
       }
     ]
   },

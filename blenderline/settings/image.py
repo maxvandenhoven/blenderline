@@ -6,6 +6,7 @@ import pathlib
 
 from blenderline.collections import BackgroundCollection, HDRCollection, ItemCollection
 from blenderline.entries import BackgroundEntry, HDREntry, ItemEntry
+from blenderline.generators import ImageDatasetGenerator
 from blenderline.managers import BackgroundManager, HDRManager, SceneManager, ItemManager
 
 
@@ -211,3 +212,30 @@ class ImageDatasetSettings:
             max_items=self.get("items.max_items", 5),
             item_collection=self.get_item_collection()
         )
+    
+
+    def get_dataset_generator(self) -> ImageDatasetGenerator:
+        """ Create image dataset generator using parameters configured in settings.
+
+        Returns:
+            ImageDatasetGenerator: dataste generator object.
+        """      
+        # Create object using settings.  
+        image_dataset_generator = ImageDatasetGenerator(
+            name=self.get("dataset.name", "dataset"),
+            base_dir=self.base_dir,
+            scene_manager=self.get_scene_manager(),
+            hdr_manager=self.get_hdr_manager(),
+            background_manager=self.get_background_manager(),
+            item_manager=self.get_item_manager()
+        )
+
+        # Register all splits.
+        for split_dict in self.get("dataset.splits", []):
+            if "name" not in split_dict or "size" not in split_dict:
+                raise Exception("Invalid split configured. Specify name and size keys.")
+            
+            image_dataset_generator.register_split(split_dict["name"], split_dict["size"])
+
+        return image_dataset_generator
+    
