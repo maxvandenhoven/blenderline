@@ -146,3 +146,9 @@ class ItemManager:
         # Set pass index on every spawned item.
         for pass_index, item_reference in enumerate(self.item_references):
             item_reference.set_pass_index(pass_index + 1) # Add one as background is 0.
+
+
+    def clear(self) -> None:
+        """ Remove all currently spawned item references from the scene. """
+        while self.item_references:
+            self.item_references.pop().delete()

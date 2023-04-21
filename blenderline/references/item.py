@@ -85,3 +85,8 @@ class ItemReference:
 
         # Check if distance satisfies both minimum margin distances
         return distance > max(current_min_margin_distance, proposed_min_margin_distance) 
+    
+
+    def delete(self) -> None:
+        """ Remove item object scene. """        
+        bpy.data.objects.remove(self.item_object, do_unlink=True)

@@ -35,9 +35,10 @@ def main() -> None:
     item_manager.sample()
     item_manager.assign_pass_indices()
     scene_manager.render(
-        output_folder=pathlib.Path.home() / "Desktop",
+        output_folder=pathlib.Path.home() / "Desktop/train/0",
         item_references=item_manager.item_references
     )
+    item_manager.clear()
 
 
 if __name__ == "__main__":
