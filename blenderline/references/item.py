@@ -28,7 +28,10 @@ class ItemReference:
 
         # Prepare object for rotation by saving current orientation (up on initialization)
         self.orientation = mathutils.Vector((0, 0, 1))
-        self.item_object.rotation_mode = 'QUATERNION'
+        self.item_object.rotation_mode = "QUATERNION"
+
+        # Set default pass index of object
+        self.pass_index = 0
 
 
     def set_pass_index(self, pass_index: int) -> None:
@@ -38,6 +41,7 @@ class ItemReference:
             pass_index (int): pass index to set on object. Must be between 0 and 255.
         """        
         self.item_object.pass_index = pass_index
+        self.pass_index = pass_index
 
 
     def orient_to_vector(self, desired_orientation: mathutils.Vector) -> None:
