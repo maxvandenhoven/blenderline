@@ -1,14 +1,14 @@
 {
   "dataset": {
-    "name": "example_beer2",
+    "name": "example_beer",
     "splits": [
       {
         "name": "train",
-        "size": 2
+        "size": 2000
       },
       {
         "name": "valid",
-        "size": 1
+        "size": 500
       }
     ]
   },
