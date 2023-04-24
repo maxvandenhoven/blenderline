@@ -18,7 +18,7 @@ def main() -> None:
     # Get settings object.
     image_dataset_settings = ImageDatasetSettings(
         base_dir=base_dir, 
-        filepath="config/example_beer/image.json"
+        filepath="examples/example_beer/config/image.json"
     )
 
     # Generate dataset.

@@ -1,19 +1,19 @@
 {
   "dataset": {
-    "name": "example_beer",
+    "name": "example_beer2",
     "splits": [
       {
         "name": "train",
-        "size": 2000
+        "size": 2
       },
       {
         "name": "valid",
-        "size": 500
+        "size": 1
       }
     ]
   },
   "scene": {
-    "path": "assets/example_beer/scenes/scene-001.blend",
+    "path": "examples/example_beer/assets/scenes/scene-001.blend",
     "camera_object_name": "camera",
     "render_samples": 1024,
     "render_use_cuda": true,
@@ -26,11 +26,11 @@
   "hdrs": {
     "entries": [
       {
-        "path": "assets/example_beer/hdrs/factory-interior-001.exr",
+        "path": "examples/example_beer/assets/hdrs/factory-interior-001.exr",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/hdrs/field-exterior-001.hdr",
+        "path": "examples/example_beer/assets/hdrs/field-exterior-001.hdr",
         "relative_frequency": 10
       }
     ]
@@ -39,27 +39,27 @@
     "background_object_name": "background",
     "entries": [
       {
-        "path": "assets/example_beer/backgrounds/factory-001.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-001.png",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/backgrounds/factory-002.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-002.png",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/backgrounds/factory-003.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-003.png",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/backgrounds/factory-004.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-004.png",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/backgrounds/factory-005.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-005.png",
         "relative_frequency": 1
       },
       {
-        "path": "assets/example_beer/backgrounds/factory-006.png",
+        "path": "examples/example_beer/assets/backgrounds/factory-006.png",
         "relative_frequency": 1
       }
     ]
@@ -71,7 +71,7 @@
     "max_items": 10,
     "entries": [
       {
-        "path": "assets/example_beer/items/heineken-001.blend",
+        "path": "examples/example_beer/assets/items/heineken-001.blend",
         "label": "bottle-green-001",
         "object_name": "heineken",
         "relative_frequency": 1,
@@ -79,7 +79,7 @@
         "max_lateral_distance": 0
       },
       {
-        "path": "assets/example_beer/items/hertog-jan-001.blend",
+        "path": "examples/example_beer/assets/items/hertog-jan-001.blend",
         "label": "bottle-brown-001",
         "object_name": "hertog-jan",
         "relative_frequency": 1,
