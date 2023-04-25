@@ -169,7 +169,7 @@ class SceneManager:
     ) -> None:
         """ Render current scene, outputting rendered image and all item segmentation 
             masks. Rendered image will have filename "image__0001.png". Segmentation masks
-            will have filename "<label>__<random item ID>__0001.png".
+            will have filename "<label ID>__<random item ID>__0001.png".
 
         Args:
             output_folder (pathlib.Path): folder to store images in.

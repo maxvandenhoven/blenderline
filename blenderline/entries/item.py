@@ -19,7 +19,7 @@ class ItemEntry(BaseEntry):
     def __init__(
         self,
         filepath: pathlib.Path,
-        label: str,
+        label: int,
         object_name: str,
         min_margin_distance: float,
         max_lateral_distance: float,
@@ -29,7 +29,7 @@ class ItemEntry(BaseEntry):
 
         Args:
             filepath (pathlib.Path): absolute filepath to item .blend asset.
-            label (str): label category of object.
+            label (int): label index of object.
             object_name (str): name of object in item .blend file.
             min_margin_distance (float): minimum distance (in Blender units) other items
                 need to be away from this item. Distance is computed between item center
@@ -70,7 +70,7 @@ class ItemEntry(BaseEntry):
 
         # Generate random name for object in scene to prevent object name 
         # collisions when multiple objects are added to the scene
-        scene_object_name = self.label + "__" + secrets.token_hex(8)
+        scene_object_name = str(self.label) + "__" + secrets.token_hex(8)
         
         # Select spawned object and set proper name and location
         item_object = bpy.data.objects[self.object_name]
