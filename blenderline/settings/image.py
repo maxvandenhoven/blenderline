@@ -16,8 +16,8 @@ from blenderline.managers import BackgroundManager, HDRManager, SceneManager, It
 class ImageDatasetSettings:
     def __init__(
         self, 
-        base_dir: str | pathlib.Path, 
-        filepath: str | pathlib.Path
+        base_dir: pathlib.Path, 
+        filepath: pathlib.Path
     ) -> None:
         """ TODO
 
@@ -29,6 +29,9 @@ class ImageDatasetSettings:
         self.base_dir = base_dir
         with open(filepath, mode="rt", encoding="utf-8") as file:
             self.settings: dict = json.load(file)
+
+        # Get configuration file directory.
+        self.config_dir = filepath.parent
 
 
     def get(self, key: str, default = None):
@@ -79,7 +82,7 @@ class ImageDatasetSettings:
             # Build registered HDR object from dict and register it to the collection.
             hdr_collection.register(
                 HDREntry(
-                    filepath=self.base_dir / hdr["path"],
+                    filepath=self.config_dir / hdr["path"],
                     relative_frequency=hdr.get("relative_frequency", 1)
                 )
             )
@@ -106,7 +109,7 @@ class ImageDatasetSettings:
             # Build registered HDR object from dict and register it to the collection.
             background_collection.register(
                 BackgroundEntry(
-                    filepath=self.base_dir / background["path"],
+                    filepath=self.config_dir / background["path"],
                     relative_frequency=background.get("relative_frequency", 1)
                 )
             )
@@ -142,7 +145,7 @@ class ImageDatasetSettings:
             # Build registered HDR object from dict and register it to the collection.
             item_collection.register(
                 ItemEntry(
-                    filepath=self.base_dir / item["path"],
+                    filepath=self.config_dir / item["path"],
                     label=item["label"],
                     object_name=item["object_name"],
                     min_margin_distance=item["min_margin_distance"],
@@ -167,7 +170,7 @@ class ImageDatasetSettings:
         # Return scene manager with specified parameters, falling back to defaults if not
         # specified.
         return SceneManager(
-            filepath=self.base_dir / self.settings["scene"]["path"],
+            filepath=self.config_dir / self.settings["scene"]["path"],
             camera_object_name=self.get("scene.camera_object_name", "camera"),
             render_samples=self.get("scene.render_samples", 1024),
             render_use_cuda=self.get("scene.render_use_cuda", False),
