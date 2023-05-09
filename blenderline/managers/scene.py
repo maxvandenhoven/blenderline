@@ -1,6 +1,3 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import pathlib
 import secrets
 
@@ -9,12 +6,9 @@ import bpy
 from blenderline.references import ItemReference
 
 
-##########################################################################################
-# Scene manager class
-##########################################################################################
 class SceneManager:
-    """ Manager for scene-related operations, such as loading a scene and configuring the
-        camera. 
+    """Manager for scene-related operations, such as loading a scene and configuring the
+    camera.
     """
 
     def __init__(
@@ -26,7 +20,7 @@ class SceneManager:
         render_denoising: bool,
         render_resolution: list[int, int],
     ) -> None:
-        """ Create scene manager.
+        """Create scene manager.
 
         Args:
             filepath (pathlib.Path): absolute filepath to scene .blend asset.
@@ -35,7 +29,7 @@ class SceneManager:
             render_use_cuda (bool): whether to use CPU (False) or CUDA GPU (True).
             render_denoising (bool): enable denoising on rendered image.
             render_resolution (list[int, int]): image resolution ([x, y]) to render at.
-        """              
+        """
         # Save object attributes
         self.filepath = filepath
         self.camera_object_name = camera_object_name
@@ -44,27 +38,25 @@ class SceneManager:
         self.render_denoising = render_denoising
         self.render_resolution = render_resolution
 
-
     def initialize(self) -> None:
-        """ Initialize scene using specified parameters by loading scene and configuring 
-            the camera. 
+        """Initialize scene using specified parameters by loading scene and configuring
+        the camera.
         """
         self.load_scene()
         self.configure_camera()
 
-
     def load_scene(self) -> None:
-        """ Load scene .blend file as main Blender file. """ 
+        """Load scene .blend file as main Blender file."""
         # Start with empty Blender file.
         bpy.ops.wm.read_factory_settings(use_empty=True)
 
         # Add collection to copy all scene objects to from scene .blend file.
         scene_collection = bpy.data.collections.new("scene")
         bpy.context.scene.collection.children.link(scene_collection)
-        
+
         # Copy all objects from specified scene .blend file. Note that collection
         # organization of original scene .blend file is lost, as all objects are placed
-        # in a new collection named "scene". 
+        # in a new collection named "scene".
         with bpy.data.libraries.load(str(self.filepath)) as (data_from, data_to):
             data_to.objects = data_from.objects
 
@@ -72,9 +64,8 @@ class SceneManager:
             if object is not None:
                 scene_collection.objects.link(object)
 
-
     def configure_camera(self) -> None:
-        """ Configure active camera in scene. """
+        """Configure active camera in scene."""
         # Get camera object and set it as active in the scene.
         camera_object = bpy.data.objects[self.camera_object_name]
         bpy.context.scene.camera = camera_object
@@ -95,9 +86,8 @@ class SceneManager:
         bpy.context.scene.render.resolution_x = self.render_resolution[0]
         bpy.context.scene.render.resolution_y = self.render_resolution[1]
 
-
     def reset_compositor_nodes(self) -> None:
-        """ Configure render settings. """
+        """Configure render settings."""
         # Enable object pass indexin view layer.
         bpy.context.scene.view_layers[0].use_pass_object_index = True
 
@@ -118,7 +108,9 @@ class SceneManager:
         image_filename = "image/" + "image__" + secrets.token_hex(8) + "__"
 
         # Add File Output node. Save node as instance attribute to change output path.
-        node: bpy.types.CompositorNodeOutputFile = self.nodes.new("CompositorNodeOutputFile")
+        node: bpy.types.CompositorNodeOutputFile = self.nodes.new(
+            "CompositorNodeOutputFile"
+        )
         self.file_output_node = node
         self.file_output_node.file_slots.remove(node.inputs["Image"])
         self.file_output_node.file_slots.new(image_filename)
@@ -132,13 +124,12 @@ class SceneManager:
             output=self.file_output_node.inputs[image_filename],
         )
 
-
     def add_item_reference_render_output(self, item_reference: ItemReference) -> None:
-        """ Add nodes to get segmentation mask corresponding to an item reference.
+        """Add nodes to get segmentation mask corresponding to an item reference.
 
         Args:
             item_reference (ItemReference): item reference to generate mask output for.
-        """        
+        """
         # Generate object segmentation mask output filename
         mask_filename = "masks/" + item_reference.item_object.name + "__"
 
@@ -161,21 +152,20 @@ class SceneManager:
             output=self.file_output_node.inputs[mask_filename],
         )
 
-
     def render(
-        self, 
-        output_folder: pathlib.Path, 
+        self,
+        output_folder: pathlib.Path,
         item_references: list[ItemReference],
     ) -> None:
-        """ Render current scene, outputting rendered image and all item segmentation 
+        """Render current scene, outputting rendered image and all item segmentation
             masks. Rendered image will have filename "image__0001.png". Segmentation masks
             will have filename "<label ID>__<random item ID>__0001.png".
 
         Args:
             output_folder (pathlib.Path): folder to store images in.
-            item_references (list[ItemReference]): list of item refereces to generate 
+            item_references (list[ItemReference]): list of item refereces to generate
                 masks for.
-        """        
+        """
         # Reset compositor nodes.
         self.reset_compositor_nodes()
 
@@ -188,5 +178,3 @@ class SceneManager:
 
         # Start render.
         bpy.ops.render.render()
-
-        

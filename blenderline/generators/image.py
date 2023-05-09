@@ -1,28 +1,19 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import pathlib
 
-from blenderline.managers import SceneManager, HDRManager, BackgroundManager, ItemManager
+from blenderline.managers import BackgroundManager, HDRManager, ItemManager, SceneManager
 
 
-##########################################################################################
-# Split class
-##########################################################################################
 class Split:
-    """ Split in dataset. """   
+    """Split in dataset."""
 
     def __init__(self, name: str, size: int) -> None:
-        """ Create dataset split. """
+        """Create dataset split."""
         self.name = name
         self.size = size
 
 
-##########################################################################################
-# Image dataset generator
-##########################################################################################
 class ImageDatasetGenerator:
-    """ Generator for image datasets. """
+    """Generator for image datasets."""
 
     def __init__(
         self,
@@ -33,7 +24,7 @@ class ImageDatasetGenerator:
         background_manager: BackgroundManager,
         item_manager: ItemManager,
     ) -> None:
-        """ Create dataset generator.
+        """Create dataset generator.
 
         Args:
             name (str): name of dataset. Output folder will be base_dir/data/<name>/<split>.
@@ -42,7 +33,7 @@ class ImageDatasetGenerator:
             hdr_manager (HDRManager): HDR background manager.
             background_manager (BackgroundManager): background manager.
             item_manager (ItemManager): item manager.
-        """        
+        """
         # Save object attributes.
         self.name = name
         self.base_dir = base_dir
@@ -54,16 +45,14 @@ class ImageDatasetGenerator:
         # Keep track of registered splits.
         self.registered_splits: list[Split] = []
 
-
     def register_split(self, name: str, size: int) -> None:
-        """ Register dataset split to generate
+        """Register dataset split to generate
 
         Args:
             name (str): name of split to generate within dataset name output folder.
             size (int): number of images to generate.
-        """        
+        """
         self.registered_splits.append(Split(name, size))
-
 
     def initialize(self) -> None:
         self.scene_manager.initialize()
@@ -71,7 +60,6 @@ class ImageDatasetGenerator:
         self.background_manager.initialize()
         self.item_manager.initialize()
 
-    
     def generate_dataset(self) -> None:
         for split in self.registered_splits:
             for i in range(split.size):
@@ -85,10 +73,13 @@ class ImageDatasetGenerator:
 
                 # Render image and segmentation masks
                 self.scene_manager.render(
-                    output_folder=self.base_dir / "data" / self.name / split.name / str(i),
-                    item_references=self.item_manager.item_references
+                    output_folder=self.base_dir
+                    / "data"
+                    / self.name
+                    / split.name
+                    / str(i),
+                    item_references=self.item_manager.item_references,
                 )
 
                 # Clear items for next iteration
                 self.item_manager.clear()
-

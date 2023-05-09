@@ -1,6 +1,3 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import argparse
 import pathlib
 import sys
@@ -9,23 +6,22 @@ import sys
 blenderline_dir = pathlib.Path(__file__).parent.parent.parent
 sys.path.append(str(blenderline_dir))
 
-from blenderline.settings import ImageDatasetSettings
+from blenderline.settings import ImageDatasetSettings  # noqa: E402
 
 
-##########################################################################################
-# Main script
-##########################################################################################
 def main() -> None:
     # Build parser for arguments supplied to blender after "--"
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c", "--config",
+        "-c",
+        "--config",
         metavar="<filepath>",
         help="location of config file",
         required=True,
     )
     parser.add_argument(
-        "-b", "--base-dir",
+        "-b",
+        "--base-dir",
         metavar="<filepath>",
         help="location from which BlenderLine is called",
         required=True,
@@ -35,9 +31,9 @@ def main() -> None:
     if "--" not in sys.argv:
         args = parser.parse_args([])
     else:
-        args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:])
+        args = parser.parse_args(sys.argv[sys.argv.index("--") + 1 :])
 
-     # Get settings object.
+    # Get settings object.
     image_dataset_settings = ImageDatasetSettings(
         base_dir=pathlib.Path(args.base_dir),
         filepath=pathlib.Path(args.config),

@@ -1,6 +1,3 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import pathlib
 import secrets
 
@@ -10,11 +7,8 @@ from blenderline.entries.base import BaseEntry
 from blenderline.references.item import ItemReference
 
 
-##########################################################################################
-# Item entry class
-##########################################################################################
 class ItemEntry(BaseEntry):
-    """ Item entry. """
+    """Item entry."""
 
     def __init__(
         self,
@@ -25,7 +19,7 @@ class ItemEntry(BaseEntry):
         max_lateral_distance: float,
         relative_frequency: float,
     ) -> None:
-        """ Create item entry.
+        """Create item entry.
 
         Args:
             filepath (pathlib.Path): absolute filepath to item .blend asset.
@@ -36,7 +30,7 @@ class ItemEntry(BaseEntry):
                 points.
             max_lateral_distance (float): maximum distance item can move from path.
             relative_frequency (float): relative frequency with which to sample.
-        """        
+        """
         # Save object attributes
         self.filepath = filepath
         self.label = label
@@ -45,9 +39,8 @@ class ItemEntry(BaseEntry):
         self.max_lateral_distance = max_lateral_distance
         self.relative_frequency = relative_frequency
 
-
     def spawn(self, location: tuple[float, float, float]) -> ItemReference:
-        """ Instantiate item object in the scene at a given location.
+        """Instantiate item object in the scene at a given location.
 
         Args:
             location (tuple[float, float, float]): location to spawn object at.
@@ -59,19 +52,17 @@ class ItemEntry(BaseEntry):
 
         with bpy.data.libraries.load(str(self.filepath)) as (data_from, data_to):
             data_to.objects = [
-                name 
-                for name in data_from.objects 
-                if name == self.object_name
+                name for name in data_from.objects if name == self.object_name
             ]
 
         for object in data_to.objects:
             if object is not None:
                 scene_item_collection.objects.link(object)
 
-        # Generate random name for object in scene to prevent object name 
+        # Generate random name for object in scene to prevent object name
         # collisions when multiple objects are added to the scene
         scene_object_name = str(self.label) + "__" + secrets.token_hex(8)
-        
+
         # Select spawned object and set proper name and location
         item_object = bpy.data.objects[self.object_name]
         item_object.name = scene_object_name

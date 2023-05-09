@@ -1,21 +1,14 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import argparse
 import os
 import pathlib
-import shutil
 import signal
-import sys
 import subprocess
+import sys
 
 base_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(str(base_dir))
 
 
-##########################################################################################
-# CLI tool
-##########################################################################################
 def cli():
     # Main parser object.
     parser = argparse.ArgumentParser(
@@ -26,26 +19,29 @@ def cli():
     # Required arguments: generation mode and config file.
     required_parser = parser.add_argument_group("required named arguments")
     required_parser.add_argument(
-        "-m", "--mode",
+        "-m",
+        "--mode",
         metavar="<option>",
         choices=["images", "video"],
         help="type of data to generate. Allowed values are images and video",
         required=True,
     )
     required_parser.add_argument(
-        "-c", "--config",
+        "-c",
+        "--config",
         metavar="<filepath>",
         help="location of config file",
         required=True,
     )
-    
+
     # Optional arguments: Blender installation path.
     optional_parser = parser.add_argument_group("optional named arguments")
     optional_parser.add_argument(
-        "-b", "--blender-path",
+        "-b",
+        "--blender-path",
         metavar="<filepath>",
         help="location of folder containg blender executable. Use quotes if filepath contains spaces",
-    ) 
+    )
 
     # Parse arguments.
     args = parser.parse_args()
@@ -67,16 +63,22 @@ def cli():
         raise NotImplementedError("Video generation is not yet implemented.")
 
     # Start Blender process.
-    p = subprocess.Popen([
-        blender_run_path, "-b", 
-        "--python", script_path, 
-        "--",
-        "--config", config_filepath,    
-        "--base-dir", os.getcwd(),
-    ])
+    p = subprocess.Popen(
+        [
+            blender_run_path,
+            "-b",
+            "--python",
+            script_path,
+            "--",
+            "--config",
+            config_filepath,
+            "--base-dir",
+            os.getcwd(),
+        ]
+    )
 
     def cleanup():
-        """ Handle cleanup of temporary resources. """
+        """Handle cleanup of temporary resources."""
         print("placeholder")
 
     def handle_sigterm(_signum, _frame):
@@ -98,6 +100,6 @@ def cli():
 
     sys.exit(p.returncode)
 
-     
+
 if __name__ == "__main__":
     cli()

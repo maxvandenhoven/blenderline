@@ -1,6 +1,3 @@
-##########################################################################################
-# Imports
-##########################################################################################
 import pathlib
 
 import bpy
@@ -8,34 +5,26 @@ import bpy
 from blenderline.entries.base import BaseEntry
 
 
-##########################################################################################
-# Background entry class
-##########################################################################################
 class BackgroundEntry(BaseEntry):
-    """ Background entry. """
+    """Background entry."""
 
-    def __init__(
-        self,
-        filepath: pathlib.Path,
-        relative_frequency: float
-    ) -> None:
-        """ Create background entry.
+    def __init__(self, filepath: pathlib.Path, relative_frequency: float) -> None:
+        """Create background entry.
 
         Args:
             filepath (pathlib.Path): absolute filepath to image asset.
             relative_frequency (float): relative frequency with which to sample.
-        """           
+        """
         # Save object attributes.
         self.filepath = filepath
         self.relative_frequency = relative_frequency
 
-
     def set(self, background_object: bpy.types.Object) -> None:
-        """ Apply background image to background object.
+        """Apply background image to background object.
 
         Args:
             background_object (bpy.types.Object): object to apply background to.
-        """               
+        """
         # Get active material node tree.
         node_tree = background_object.active_material.node_tree
         nodes = node_tree.nodes
@@ -44,18 +33,18 @@ class BackgroundEntry(BaseEntry):
         nodes.clear()
 
         # Add Texture Image node.
-        node: bpy.types.ShaderNodeTexImage = nodes.new("ShaderNodeTexImage") 
+        node: bpy.types.ShaderNodeTexImage = nodes.new("ShaderNodeTexImage")
         texture_node = node
         texture_node.image = bpy.data.images.load(str(self.filepath))
         texture_node.location = (-300, 0)
 
         # Add Principled BSDF node.
-        node: bpy.types.ShaderNodeBsdfPrincipled = nodes.new("ShaderNodeBsdfPrincipled") 
+        node: bpy.types.ShaderNodeBsdfPrincipled = nodes.new("ShaderNodeBsdfPrincipled")
         bsdf_node = node
         bsdf_node.location = (0, 0)
 
         # Add Material Output node.
-        node: bpy.types.ShaderNodeOutputMaterial = nodes.new("ShaderNodeOutputMaterial") 
+        node: bpy.types.ShaderNodeOutputMaterial = nodes.new("ShaderNodeOutputMaterial")
         output_node = node
         output_node.location = (300, 0)
 

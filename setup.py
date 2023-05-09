@@ -1,16 +1,10 @@
-##########################################################################################
-# Imports
-##########################################################################################
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 setup(
     name="blenderline",
     version="0.0.1",
     description="A pipeline for generating synthetic production line images",
-    packages=find_packages(
-        exclude=["examples*", "data*"]
-    ),
+    packages=find_packages(exclude=["examples*", "data*"]),
     url="https://github.com/MaxvandenHoven/blenderline",
     author="Max van den Hoven",
     author_email="max.hoven@gmail.com",
