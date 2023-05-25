@@ -4,11 +4,11 @@
     "splits": [
       {
         "name": "train",
-        "size": 10
+        "size": 2
       },
       {
         "name": "valid",
-        "size": 5
+        "size": 2
       }
     ]
   },
@@ -73,6 +73,7 @@
       {
         "path": "assets/items/heineken-001.blend",
         "label": 0,
+        "label_name": "green bottle",
         "object_name": "heineken",
         "relative_frequency": 1,
         "min_margin_distance": 0.06,
@@ -81,6 +82,7 @@
       {
         "path": "assets/items/hertog-jan-001.blend",
         "label": 1,
+        "label_name": "brown bottle",
         "object_name": "hertog-jan",
         "relative_frequency": 1,
         "min_margin_distance": 0.06,

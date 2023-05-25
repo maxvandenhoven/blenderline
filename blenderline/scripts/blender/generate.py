@@ -3,7 +3,7 @@ import pathlib
 import sys
 
 # Add base dir to PATH for module discovery within Blender
-blenderline_dir = pathlib.Path(__file__).parent.parent.parent
+blenderline_dir = pathlib.Path(__file__).parent.parent.parent.parent
 sys.path.append(str(blenderline_dir))
 
 from blenderline.settings import ImageDatasetSettings  # noqa: E402
@@ -13,18 +13,16 @@ def main() -> None:
     # Build parser for arguments supplied to blender after "--"
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-c",
         "--config",
-        metavar="<filepath>",
-        help="location of config file",
         required=True,
+        metavar="<filepath>",
+        help="Absolute location of the configuration file.",
     )
     parser.add_argument(
-        "-b",
-        "--base-dir",
-        metavar="<filepath>",
-        help="location from which BlenderLine is called",
+        "--target",
         required=True,
+        metavar="<filepath>",
+        help="Absolute location of the directory where the dataset is generated.",
     )
 
     # Parse arguments after "--".
@@ -35,8 +33,8 @@ def main() -> None:
 
     # Get settings object.
     image_dataset_settings = ImageDatasetSettings(
-        base_dir=pathlib.Path(args.base_dir),
-        filepath=pathlib.Path(args.config),
+        config=pathlib.Path(args.config),
+        target=pathlib.Path(args.target),
     )
 
     # Generate dataset.

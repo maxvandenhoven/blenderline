@@ -4,24 +4,30 @@ import pathlib
 from blenderline.collections import BackgroundCollection, HDRCollection, ItemCollection
 from blenderline.entries import BackgroundEntry, HDREntry, ItemEntry
 from blenderline.generators import ImageDatasetGenerator
-from blenderline.managers import BackgroundManager, HDRManager, ItemManager, SceneManager
+from blenderline.managers import (
+    BackgroundManager,
+    HDRManager,
+    ItemManager,
+    SceneManager,
+)
 
 
 class ImageDatasetSettings:
-    def __init__(self, base_dir: pathlib.Path, filepath: pathlib.Path) -> None:
+    def __init__(self, config: pathlib.Path, target: pathlib.Path) -> None:
         """TODO
 
         Args:
-            base_dir (pathlib.Path): Path to project directory.
-            filename (pathlib.Path): Path to JSON config file.
+            config (pathlib.Path): Absolute location of the configuration file.
+            target (pathlib.Path): Absolute location of the directory where the dataset
+                is generated.
         """
         # Save base directory and load JSON config object.
-        self.base_dir = base_dir
-        with open(filepath, mode="rt", encoding="utf-8") as file:
+        self.target = target
+        with open(config, mode="rt") as file:
             self.settings: dict = json.load(file)
 
         # Get configuration file directory.
-        self.config_dir = filepath.parent
+        self.config_dir = config.parent
 
     def get(self, key: str, default=None):
         """Get nested value from settings dictionary using dot notation to specify
@@ -121,6 +127,8 @@ class ImageDatasetSettings:
                 raise Exception("Configure path to item asset")
             if "label" not in item:
                 raise Exception("Configure item label")
+            if "label_name" not in item:
+                raise Exception("Configure item label name")
             if "object_name" not in item:
                 raise Exception("Configure name of object in .blend file")
             if "min_margin_distance" not in item:
@@ -207,7 +215,7 @@ class ImageDatasetSettings:
         # Create object using settings.
         image_dataset_generator = ImageDatasetGenerator(
             name=self.get("dataset.name", "dataset"),
-            base_dir=self.base_dir,
+            target=self.target,
             scene_manager=self.get_scene_manager(),
             hdr_manager=self.get_hdr_manager(),
             background_manager=self.get_background_manager(),
@@ -217,10 +225,20 @@ class ImageDatasetSettings:
         # Register all splits.
         for split_dict in self.get("dataset.splits", []):
             if "name" not in split_dict or "size" not in split_dict:
-                raise Exception("Invalid split configured. Specify name and size keys.")
+                raise Exception("Invalid split configured. Specify name and size keys")
 
             image_dataset_generator.register_split(
-                split_dict["name"], split_dict["size"]
+                name=split_dict["name"], size=split_dict["size"]
+            )
+
+        # Register all labels.
+        for item_dict in self.get("items.entries", []):
+            if "label" not in item_dict or "label_name" not in item_dict:
+                raise Exception("Invalid item configured, Specify label and label name")
+
+            # Build registered HDR object from dict and register it to the collection.
+            image_dataset_generator.register_label(
+                label=item_dict["label"], label_name=item_dict["label_name"]
             )
 
         return image_dataset_generator

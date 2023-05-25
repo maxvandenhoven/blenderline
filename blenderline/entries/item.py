@@ -61,7 +61,7 @@ class ItemEntry(BaseEntry):
 
         # Generate random name for object in scene to prevent object name
         # collisions when multiple objects are added to the scene
-        scene_object_name = str(self.label) + "__" + secrets.token_hex(8)
+        scene_object_name = secrets.token_hex(6)
 
         # Select spawned object and set proper name and location
         item_object = bpy.data.objects[self.object_name]

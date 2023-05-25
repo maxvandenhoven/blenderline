@@ -8,7 +8,7 @@ format-isort:
 	@echo Formatting with isort ...
 	@isort blenderline
 
-format: format-black format-isort
+format-project: format-black format-isort
 
 # Linting
 lint-flake8:
@@ -20,8 +20,8 @@ lint-mypy:
 	@echo Linting with mypy ...
 	@mypy blenderline
 
-lint: lint-flake8 lint-mypy
+lint-project: lint-flake8 lint-mypy
 
 # Build
-build:
+build-project:
 	@python setup.py bdist_wheel sdist

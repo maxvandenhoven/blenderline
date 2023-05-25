@@ -105,7 +105,7 @@ class SceneManager:
         self.render_layers_node.location = (-300, 0)
 
         # Generate random indentifier for image
-        image_filename = "image/" + "image__" + secrets.token_hex(8) + "__"
+        image_filename = "image__" + secrets.token_hex(6) + "__"
 
         # Add File Output node. Save node as instance attribute to change output path.
         node: bpy.types.CompositorNodeOutputFile = self.nodes.new(
@@ -131,7 +131,13 @@ class SceneManager:
             item_reference (ItemReference): item reference to generate mask output for.
         """
         # Generate object segmentation mask output filename
-        mask_filename = "masks/" + item_reference.item_object.name + "__"
+        mask_filename = (
+            "mask__"
+            + str(item_reference.reference_entry.label)
+            + "__"
+            + secrets.token_hex(6)
+            + "__"
+        )
 
         # Add output file for object segmentation mask to File Output node.
         self.file_output_node.file_slots.new(mask_filename)
