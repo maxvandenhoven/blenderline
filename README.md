@@ -26,7 +26,7 @@ Coming soon!
 
 ## 3. Features
 - **Flexible**: BlenderLine imposes as little constraints on your 3D modeling workflow as possible, giving you the freedom to model your production line as you see fit.
-- **Declerative**: Instead of having to write the generation code yourself, BlenderLine enables you to define the desired behavior of objects on your production line using declarative configuration files. 
+- **Declarative**: Instead of having to write the generation code yourself, BlenderLine enables you to define the desired behavior of objects on your production line using declarative configuration files. 
 - **Powerful**: Despite using declarative configuration files, BlenderLine is powerful enough to support a wide variety of use cases, ranging from narrow bottle counting lines (see `examples/example_beer`) to wide conveyor belts (example planned).
 - **Convenient**: BlenderLine includes tools to easily convert generated datasets into common computer vision dataset formats:
   - `yolo_detection`
