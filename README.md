@@ -6,6 +6,8 @@
 [![GPLv3](https://img.shields.io/static/v1?message=black&color=black&label=Code%20style&style=flat)](https://github.com/psf/black)
 
 
+![Workflow](img/workflow.png)
+
 ## 1. Table of Contents
 <details>
 <summary> Table of Contents </summary>
