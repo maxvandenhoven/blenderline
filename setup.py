@@ -19,6 +19,14 @@ setup(
         "blender-stubs>=3.12.27",
         "bpy>=3.5.0",
     ],
+    extras_require={
+        "dev": [
+            "black>=23.3.0",
+            "isort>=5.12.0",
+            "flake8>=6.0.0",
+            "twine>=4.0.2",
+        ],
+    },
     python_requires=">=3.10",
     entry_points={
         "console_scripts": [
