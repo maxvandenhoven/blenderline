@@ -1,10 +1,15 @@
 from setuptools import find_packages, setup
 
+with open("README.md", "r") as file:
+    long_description = file.read()
+
 setup(
     name="blenderline",
-    version="0.1.0",
+    version="0.1.5",
     description="A pipeline for generating synthetic production line images",
     packages=find_packages(exclude=["examples*", "data*"]),
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/MaxvandenHoven/blenderline",
     author="Max van den Hoven",
     author_email="max.hoven@gmail.com",

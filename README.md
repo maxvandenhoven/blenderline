@@ -6,7 +6,7 @@
 [![GPLv3](https://img.shields.io/static/v1?message=black&color=black&label=Code%20style&style=flat)](https://github.com/psf/black)
 
 
-![Workflow](img/workflow.png)
+![](https://github.com/maxvandenhoven/blenderline/blob/main/img/workflow.png?raw=true)
 
 ## 1. Table of Contents
 <details>
@@ -67,30 +67,31 @@ blenderline generate --config examples/example_beer/images.json --target data/ra
 This will generate a dataset with the following structure:
 ```
 data/
-└─ raw/
-   └─ example_beer/
-      ├─ train/
-      │  ├─ 0/
-      │  │  ├─ image__f0825a6262fc__0001.png
-      │  │  ├─ mask__0__8acdea079f10__0001.png
-      │  │  ├─ mask__1__0181a303d637__0001.png
-      │  │  └─ ...
-      │  └─ 1/
-      │     ├─ image__7abe7f02c7d9__0001.png
-      │     ├─ mask__1__19abef8a5cef__0001.png
-      │     ├─ mask__1__d980d4a83682__0001.png
-      │     └─ ...
-      ├─ valid/
-      │  ├─ 0/...
-      │  └─ 1/...
-      └─ label_mapping.json
++- raw/
+   +- example_beer/
+      +- train/
+      |  +- 0/
+      |  |  +- image__f0825a6262fc__0001.png
+      |  |  +- mask__0__8acdea079f10__0001.png
+      |  |  +- mask__1__0181a303d637__0001.png
+      |  |  +- ...
+      |  +- 1/
+      |     +- image__7abe7f02c7d9__0001.png
+      |     +- mask__1__19abef8a5cef__0001.png
+      |     +- mask__1__d980d4a83682__0001.png
+      |     +- ...
+      +- valid/
+      |  +- 0/...
+      |  +- 1/...
+      +- label_mapping.json
 
 ```
 
 While not strictly necessary, setting `--target data/raw` will create a folder structure that allows you to track different versions of the data, e.g., after using the `blenderline convert` command. 
 
 Note that the dataset root folder (here named `example_beer`) contains subfolders for different splits defined in the configuration file. Each split contains a numbered list of instance folders, each containing a rendered image and a set of masks. An example instance might look as follows:
-![Example instance](/img/example-instance.png)
+![](https://github.com/maxvandenhoven/blenderline/blob/main/img/example-instance.png?raw=true)
+
 
 Image and mask files use the following naming convention:
 ```
