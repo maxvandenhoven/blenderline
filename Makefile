@@ -23,3 +23,6 @@ build-project:
 publish-project:
 	@twine check dist/*
 	@twine upload dist/*
+
+
+all: format-project lint-project build-project publish-project
