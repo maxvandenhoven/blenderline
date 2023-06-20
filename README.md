@@ -1,13 +1,15 @@
+<h1 align="center">
 ![](https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-light.svg?raw=true#gh-light-mode-only)
 ![](https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-dark.svg?raw=true#gh-dark-mode-only)
+</h1>
+
+---
 
 [![GPLv3](https://img.shields.io/static/v1?message=GPLv3&color=blue&label=License&style=flat)](https://www.gnu.org/licenses/gpl-3.0)
-[![Blender](https://img.shields.io/static/v1?message=3.10%2B&logo=python&color=blue&logoColor=white&label=Python&style=flat)](https://www.python.org/)
+[![Python](https://img.shields.io/static/v1?message=3.10%2B&logo=python&color=blue&logoColor=white&label=Python&style=flat)](https://www.python.org/)
 [![Blender](https://img.shields.io/static/v1?message=3.4%2B&logo=blender&color=orange&logoColor=white&label=Blender&style=flat)](https://www.blender.org/)
 [![GPLv3](https://img.shields.io/static/v1?message=black&color=black&label=Code%20style&style=flat)](https://github.com/psf/black)
-
-
-![](https://github.com/maxvandenhoven/blenderline/blob/main/img/workflow.png?raw=true)
+[![Documentation Status](https://readthedocs.org/projects/blenderline/badge/?version=latest)](https://blenderline.readthedocs.io/en/latest/?badge=latest)
 
 ## 1. Table of Contents
 <details>
