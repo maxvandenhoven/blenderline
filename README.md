@@ -1,4 +1,5 @@
-# BlenderLine
+![](https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-light.svg?raw=true#gh-light-mode-only)
+![](https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-dark.svg?raw=true#gh-dark-mode-only)
 
 [![GPLv3](https://img.shields.io/static/v1?message=GPLv3&color=blue&label=License&style=flat)](https://www.gnu.org/licenses/gpl-3.0)
 [![Blender](https://img.shields.io/static/v1?message=3.10%2B&logo=python&color=blue&logoColor=white&label=Python&style=flat)](https://www.python.org/)
