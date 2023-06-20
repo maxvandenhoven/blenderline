@@ -1,28 +1,47 @@
-# Formatting
-format-black:
+# Format source code using black formatter
+.PHONY: black
+black:
 	@echo Formatting with black ...
 	@black blenderline
 
-format-isort:
-	@echo.
+# Format source code using isort formatter
+.PHONY: isort
+isort:
 	@echo Formatting with isort ...
 	@isort blenderline
 
-format-project: format-black format-isort
+# Run both formatters
+.PHONY: format
+format: format-black format-isort
 
-# Linting
-lint-project:
+# Lint source code using flake8 linter
+.PHONY: lint
+lint:
 	@echo Linting with flake8 ...
 	@flake8 blenderline
 
-# Building
-build-project:
+# Build BlenderLine using setuptools
+.PHONY: build
+build:
+	@echo Building with setuptools ...
 	@python setup.py bdist_wheel sdist
 
-# Publishing
-publish-project:
+# Publish BlenderLine to PyPI using twine (make sure to bump version beforehand)
+.PHONY: publish
+publish:
+	@echo Checking package with twine ...
 	@twine check dist/*
+	@echo Uploading package with twine ...
 	@twine upload dist/*
 
+# Build BlenderLine documentation 
+.PHONY: docs
+docs:
+	@echo Building documentation with sphinx ...
+	@sphinx-build -b html -a -E -j=auto docs/source docs/build/html
 
-all: format-project lint-project build-project publish-project
+# Build BlenderLine documentation with live test-server for development
+.PHONY: livedocs
+livedocs:
+	@echo Starting development documentation server with sphinx-autobuild ...
+	@sphinx-autobuild -b html -a -E -j=auto --watch blenderline docs/source docs/build/html

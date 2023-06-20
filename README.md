@@ -23,7 +23,7 @@
 
 
 ## 2. Description
-Coming soon!
+BlenderLine is an open-source tool for generating synthetic image data for object detection, segmentation, and counting tasks in manufacturing settings. Leveraging 3D CAD models commonly found in manufacturing plants, BlenderLine automatically generates large and diverse datasets with pixel-perfect labels, reducing the time and effort traditionally required for manual data collection and annotation.
 
 
 ## 3. Features

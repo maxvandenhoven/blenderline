@@ -1,0 +1,24 @@
+/* Landing page card buttons */
+.sd-btn-secondary {
+    background: linear-gradient(115deg, #d53369 0%, #daae51 100%);
+    border: none;
+}
+.sd-btn-secondary:hover {
+    background: linear-gradient(115deg, #a92350 0%, #bd8e28 100%);
+    border: none;
+}
+
+/* Add left border to API reference class/method/property headers */
+dt.sig-object { 
+    border-left: 4px solid #d53369;
+}
+
+/* Increase font weight on prenames, e.g. blenderline.managers, for visual consistency */
+span.sig-prename {
+    font-weight: 700;
+}
+
+/* Reduce font weight of method/function parameters for better discriminability */
+em.sig-param {
+    font-weight: 500;
+}

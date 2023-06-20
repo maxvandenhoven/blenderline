@@ -13,6 +13,8 @@ from blenderline.managers import (
 
 
 class ImageDatasetSettings:
+    """TODO"""
+
     def __init__(self, config: pathlib.Path, target: pathlib.Path) -> None:
         """TODO
 
