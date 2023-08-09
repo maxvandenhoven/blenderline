@@ -12,7 +12,7 @@ isort:
 
 # Run both formatters
 .PHONY: format
-format: format-black format-isort
+format: black isort
 
 # Lint source code using flake8 linter
 .PHONY: lint

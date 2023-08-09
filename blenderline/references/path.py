@@ -18,7 +18,7 @@ class PathReference:
 
     def sample(self) -> tuple[mathutils.Vector, mathutils.Vector, mathutils.Vector]:
         """Sample random location along the path and return location, normal vector in
-            the x-y plane, and a normal vector in the local z plane.
+        the x-y plane, and a normal vector in the local z plane.
         """
         # Get curve data from path object. It is assumed that path object only has one
         # curve, which in turn only has one spline. No error will be thrown otherwise,
