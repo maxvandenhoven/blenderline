@@ -1,9 +1,5 @@
 import os
 import pathlib
-import shutil
-
-import cv2
-import numpy as np
 
 from blenderline.scripts.python.converters import run_convert_yolo_detection
 
