@@ -72,10 +72,9 @@ def cli_parser() -> argparse.ArgumentParser:
     convert_optional_parser = convert_parser.add_argument_group("optional arguments")
     convert_optional_parser.add_argument(
         "--target",
-        required=False,
+        required=True,
         metavar="<filepath>",
-        help="Absolute or relative location of the converted dataset.\n"
-        "By default, BlenderLine adds the converted dataset to the source dataset.",
+        help="Absolute or relative location of the converted dataset.",
     )
     convert_optional_parser.add_argument(
         "--minarea",
@@ -83,7 +82,8 @@ def cli_parser() -> argparse.ArgumentParser:
         default=0.005,
         metavar="<float>",
         help="Minimum area an object mask must have to be included in the dataset.\n"
-        "Area is defined as (num_pixels_object_mask/num_pixels_total_image).",
+        "Area is defined as (num_pixels_object_mask/num_pixels_total_image).\n"
+        "By default, BlenderLine omits masks with an area less than 0.005.",
     )
     convert_flags_parser = convert_parser.add_argument_group("flags")
     convert_flags_parser.add_argument(
