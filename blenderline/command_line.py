@@ -55,7 +55,7 @@ def cli_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawTextHelpFormatter,
     )
     convert_required_parser = convert_parser.add_argument_group("required arguments")
-    format_choices = ["yolo_detection"]
+    format_choices = ["yolo_detection", "yolo_segmentation"]
     convert_required_parser.add_argument(
         "--format",
         required=True,
@@ -69,21 +69,34 @@ def cli_parser() -> argparse.ArgumentParser:
         metavar="<filepath>",
         help="Absolute or relative location of the BlenderLine dataset to convert.",
     )
-    convert_optional_parser = convert_parser.add_argument_group("optional arguments")
-    convert_optional_parser.add_argument(
+    convert_required_parser.add_argument(
         "--target",
         required=True,
         metavar="<filepath>",
         help="Absolute or relative location of the converted dataset.",
     )
+    convert_optional_parser = convert_parser.add_argument_group("optional arguments")
     convert_optional_parser.add_argument(
         "--minarea",
         required=False,
         default=0.005,
+        type=float,
         metavar="<float>",
         help="Minimum area an object mask must have to be included in the dataset.\n"
         "Area is defined as (num_pixels_object_mask/num_pixels_total_image).\n"
         "By default, BlenderLine omits masks with an area less than 0.005.",
+    )
+    convert_optional_parser.add_argument(
+        "--eps-factor",
+        required=False,
+        default=0.005,
+        type=float,
+        metavar="<float>",
+        help="Factor multiplied with contour perimeter to determine epsilon for\n"
+        "Douglas-Peucker algorithm used to simplify mask polygon. Larger values\n"
+        "lead to rougher masks, and vice versa. By default, BlenderLine uses a\n"
+        "factor of 0.005, based on the example_beer dataset. Note that this\n"
+        "argument is ignored for non-segmentation tasks.",
     )
     convert_flags_parser = convert_parser.add_argument_group("flags")
     convert_flags_parser.add_argument(
@@ -112,6 +125,7 @@ def cli():
             target=args.target,
             minarea=args.minarea,
             remove=args.remove,
+            eps_factor=args.eps_factor,
         )
 
 

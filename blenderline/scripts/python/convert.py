@@ -1,15 +1,19 @@
 import os
 import pathlib
 
-from blenderline.scripts.python.converters import run_convert_yolo_detection
+from blenderline.scripts.python.converters import (
+    run_convert_yolo_detection,
+    run_convert_yolo_segmentation,
+)
 
 CONVERTERS = {
     "yolo_detection": run_convert_yolo_detection,
+    "yolo_segmentation": run_convert_yolo_segmentation,
 }
 
 
 def run_convert(
-    format: str, source: str, target: str, minarea: float, remove: bool
+    format: str, source: str, target: str, minarea: float, remove: bool, **kwargs
 ) -> None:
     # Get absolute path to source folder and check that it is valid, i.e., exists and
     # contains a label_mapping.json file.
@@ -32,4 +36,4 @@ def run_convert(
 
     # Run converter corresponding to specified target format.
     convertor = CONVERTERS[format]
-    convertor(source_path, target_path, minarea, remove)
+    convertor(source_path, target_path, minarea, remove, **kwargs)

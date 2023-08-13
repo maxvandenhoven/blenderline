@@ -1,1 +1,2 @@
 from .yolo_detection import run_convert_yolo_detection
+from .yolo_segmentation import run_convert_yolo_segmentation

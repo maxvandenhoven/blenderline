@@ -13,47 +13,58 @@ from .utils import (
 )
 
 
-def get_yolo_detection_label(mask: BlenderLineMask, minarea: float) -> str | None:
-    """Get YOLO bounding box label from BlenderLine generated pixel mask.
-
-    Args:
-        mask (BlenderLineMask): reference to mask with image ID, label ID, and image path.
-        minarea (float): minimum area an object mask must have to be included.
-
-    Returns:
-        str | None: YOLO bounding box with class ID, or None if minarea is not exceeded.
-    """
+def get_yolo_segmentation_label(
+    mask: BlenderLineMask, minarea: float, eps_factor: float = None
+) -> str | None:
     # Read grayscale mask and binarize.
     mask_gray = cv2.imread(str(mask.path), cv2.IMREAD_GRAYSCALE)
     _, mask_binary = cv2.threshold(mask_gray, 127, 1, cv2.THRESH_OTSU)
 
-    # Return None if mask is too small (< area_threshold).
+    # Find all contours in mask image. There may be more than one contour, e.g., if the
+    # object of interest is occluded.
+    contours, _ = cv2.findContours(mask_binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    # Object area is computed by summing the area of all contour parts, in order to
+    # prevent half-labeled objects. Return None if mask is too small (< area_threshold).
     mask_height, mask_width = mask_gray.shape
-    if mask_binary.sum() / (mask_width * mask_height) < minarea:
+    total_contour_area = sum(cv2.contourArea(contour) for contour in contours)
+    if total_contour_area / (mask_width * mask_height) < minarea:
         return None
 
-    # Compute bounding box relative to mask width and height.
-    rows, cols = np.where(mask_binary == 1)
-    xmin, xmax = cols.min(), cols.max()
-    ymin, ymax = rows.min(), rows.max()
+    label_lines = []
+    for contour in contours:
+        # OpenCV often generates high-resolution boundaries, which may not be desired for
+        # segmentation tasks. The contours are therefore optionally simplified using the
+        # Douglas-Peucker algorithm, with the precision detemrined by multiplying the
+        # specified eps_factor with the contour perimeter. The approxPolyDP function
+        # takes in integer coordinates, meaning eps_factor cannot be specified in the
+        # normalized coordinate space.
+        if eps_factor:
+            epsilon = eps_factor * cv2.arcLength(contour, closed=True)
+            contour = cv2.approxPolyDP(contour, epsilon, closed=True)
 
-    xcenter = (xmin + xmax) / 2 / mask_width
-    ycenter = (ymin + ymax) / 2 / mask_height
-    width = (xmax - xmin) / mask_width
-    height = (ymax - ymin) / mask_height
+        # Normalize contour coordinates by dividing by mask dimensions (using numpy
+        # broadcasting rules with compatible trailing dimensions (1, 2)).
+        contour = contour / np.array([[mask_width, mask_height]])
 
-    # Return line in YOLO dataset format.
-    return f"{mask.label} {xcenter} {ycenter} {width} {height}"
+        # Reshape contour coordinates to sequential array and prepend mask label ID for
+        # full label line.
+        label_line = mask.label + " " + " ".join(map(str, contour.reshape(-1)))
+        label_lines.append(label_line)
+
+    # Split label lines by \n so that occluded objects get multiple lines in the label.
+    return "\n".join(label_lines)
 
 
-def run_convert_yolo_detection(
+def run_convert_yolo_segmentation(
     source_path: pathlib.Path,
     target_path: pathlib.Path,
     minarea: float,
     remove: bool,
+    eps_factor: float = None,
     **kwargs,
 ) -> None:
-    """Convert BlenderLine generated dataset to YOLO object detection dataset format.
+    """Convert BlenderLine generated dataset to YOLO segmentation dataset format.
 
     Args:
         source_path (pathlib.Path): absolute location of dataset to convert.
@@ -112,7 +123,7 @@ def run_convert_yolo_detection(
             labels = [
                 label
                 for mask in masks
-                if (label := get_yolo_detection_label(mask, minarea))
+                if (label := get_yolo_segmentation_label(mask, minarea, eps_factor))
             ]
             with open(labels_split_path / f"{image.id}.txt", "w+") as file:
                 file.write("\n".join(labels))
