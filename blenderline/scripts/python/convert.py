@@ -35,5 +35,5 @@ def run_convert(
     target_path.mkdir(parents=True, exist_ok=True)
 
     # Run converter corresponding to specified target format.
-    convertor = CONVERTERS[format]
-    convertor(source_path, target_path, minarea, remove, **kwargs)
+    converter = CONVERTERS[format]
+    converter(source_path, target_path, minarea, remove, **kwargs)
