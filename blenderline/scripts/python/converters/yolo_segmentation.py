@@ -16,6 +16,18 @@ from .utils import (
 def get_yolo_segmentation_label(
     mask: BlenderLineMask, minarea: float, eps_factor: float = None
 ) -> str | None:
+    """Get YOLO segmentation mask label from BlenderLine generated pixel mask.
+
+    Args:
+        mask (BlenderLineMask): reference to mask with image ID, label ID, and image path.
+        minarea (float): minimum area an object mask must have to be included.
+        eps_factor (float, optional): factor used to smooth segmentation mask. Higher
+            values lead to rougher masks, and vice versa. Defaults to None.
+
+    Returns:
+        str | None: YOLO segmentation mask with class ID, or None if minarea is not
+            exceeded.
+    """
     # Read grayscale mask and binarize.
     mask_gray = cv2.imread(str(mask.path), cv2.IMREAD_GRAYSCALE)
     _, mask_binary = cv2.threshold(mask_gray, 127, 1, cv2.THRESH_OTSU)
