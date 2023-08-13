@@ -5,7 +5,14 @@ import sys
 blenderline_dir = pathlib.Path(__file__).parent.parent
 sys.path.append(str(blenderline_dir))
 
-from blenderline.scripts.python import run_convert, run_generate  # noqa: E402
+from blenderline.scripts.python import (  # noqa: E402
+    run_convert,
+    run_download,
+    run_generate,
+)
+
+DOWNLOAD_NAME_CHOICES = ["example_beer"]
+CONVERT_FORMAT_CHOICES = ["yolo_detection", "yolo_segmentation"]
 
 
 def cli_parser() -> argparse.ArgumentParser:
@@ -17,6 +24,28 @@ def cli_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(
         dest="command", help="Select a BlenderLine command to run:"
+    )
+
+    # Download subparser
+    download_parser = subparsers.add_parser(
+        name="download",
+        help="Download an example BlenderLine project (assets and configuration file).",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
+    download_required_parser = download_parser.add_argument_group("required arguments")
+    download_required_parser.add_argument(
+        "name",
+        choices=DOWNLOAD_NAME_CHOICES,
+        metavar="<option>",
+        help=f"Name of example project. Must be in {{{', '.join(DOWNLOAD_NAME_CHOICES)}}}.",
+    )
+    download_optional_parser = download_parser.add_argument_group("optional arguments")
+    download_optional_parser.add_argument(
+        "--target",
+        required=False,
+        metavar="<filepath>",
+        help="Absolute or relative location of the downloaded example project.\n"
+        "By default, BlenderLine generates the dataset in the current working directory.",
     )
 
     # Generate subparser
@@ -55,13 +84,12 @@ def cli_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.RawTextHelpFormatter,
     )
     convert_required_parser = convert_parser.add_argument_group("required arguments")
-    format_choices = ["yolo_detection", "yolo_segmentation"]
     convert_required_parser.add_argument(
         "--format",
         required=True,
-        choices=format_choices,
+        choices=CONVERT_FORMAT_CHOICES,
         metavar="<option>",
-        help=f"Type of dataset to convert to. Must be in {{{', '.join(format_choices)}}}",
+        help=f"Type of dataset to convert to. Must be in {{{', '.join(CONVERT_FORMAT_CHOICES)}}}",
     )
     convert_required_parser.add_argument(
         "--source",
@@ -116,7 +144,9 @@ def cli():
 
     args = parser.parse_args()
 
-    if args.command == "generate":
+    if args.command == "download":
+        run_download(name=args.name, target=args.target)
+    elif args.command == "generate":
         run_generate(config=args.config, target=args.target, blender=args.blender)
     elif args.command == "convert":
         run_convert(
