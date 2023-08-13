@@ -13,7 +13,9 @@ from .utils import (
 )
 
 
-def get_yolo_detection_label(mask: BlenderLineMask, minarea: float) -> str | None:
+def get_yolo_detection_label(
+    mask: BlenderLineMask, minarea: float = 0.005
+) -> str | None:
     """Get YOLO bounding box label from BlenderLine generated pixel mask.
 
     Args:
@@ -49,8 +51,8 @@ def get_yolo_detection_label(mask: BlenderLineMask, minarea: float) -> str | Non
 def run_convert_yolo_detection(
     source_path: pathlib.Path,
     target_path: pathlib.Path,
-    minarea: float,
-    remove: bool,
+    minarea: float = 0.005,
+    remove: bool = False,
     **kwargs,
 ) -> None:
     """Convert BlenderLine generated dataset to YOLO object detection dataset format.

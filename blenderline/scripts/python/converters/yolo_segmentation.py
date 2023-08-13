@@ -71,8 +71,8 @@ def get_yolo_segmentation_label(
 def run_convert_yolo_segmentation(
     source_path: pathlib.Path,
     target_path: pathlib.Path,
-    minarea: float,
-    remove: bool,
+    minarea: float = 0.005,
+    remove: bool = False,
     eps_factor: float = None,
     **kwargs,
 ) -> None:

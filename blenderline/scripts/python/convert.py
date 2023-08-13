@@ -13,7 +13,12 @@ CONVERTERS = {
 
 
 def run_convert(
-    format: str, source: str, target: str, minarea: float, remove: bool, **kwargs
+    format: str,
+    source: str,
+    target: str,
+    minarea: float = 0.005,
+    remove: bool = False,
+    **kwargs
 ) -> None:
     # Get absolute path to source folder and check that it is valid, i.e., exists and
     # contains a label_mapping.json file.

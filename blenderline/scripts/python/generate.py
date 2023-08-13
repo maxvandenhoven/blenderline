@@ -8,7 +8,7 @@ blenderline_dir = pathlib.Path(__file__).parent.parent.parent.parent
 sys.path.append(str(blenderline_dir))
 
 
-def run_generate(config: str, target: str, blender: str) -> None:
+def run_generate(config: str, target: str = None, blender: str = None) -> None:
     # Get absolute path to configuration file and check that it is valid, i.e., exists
     # and is a JSON file.
     config_path = pathlib.Path(os.path.abspath(config))
