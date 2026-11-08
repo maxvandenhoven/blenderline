@@ -1,18 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
-<title id="title">blenderline logo</title>
-<desc id="desc">A paper-filled rounded hexagonal project mark with flat print inks.</desc>
-<path d="M136 20L216 66Q224 70 224 80V176Q224 186 216 190L136 236Q128 240 120 236L40 190Q32 186 32 176V80Q32 70 40 66L120 20Q128 16 136 20Z" fill="#F8F6F1" stroke="#1E1B1A" stroke-width="5"/>
-<g stroke="#1E1B1A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
-<rect x="60" y="144" width="136" height="34" rx="17" fill="#F8F6F1" stroke="#1E1B1A" stroke-width="5"/>
-<path d="M74 184V193M182 184V193" fill="none" stroke="#1E1B1A" stroke-width="5"/>
-<rect x="77" y="91" width="34" height="38" rx="4" fill="#FF6C2F" stroke="#1E1B1A" stroke-width="5"/>
-<rect x="145" y="91" width="34" height="38" rx="4" fill="#FFB511" stroke="#1E1B1A" stroke-width="5"/>
-<path d="M121 110H134M130 105L135 110L130 115" fill="none" stroke="#1E1B1A" stroke-width="3"/>
-<circle cx="78" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
-<circle cx="103" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
-<circle cx="128" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
-<circle cx="153" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
-<circle cx="178" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
-<path d="M78 81V76H88M169 76H179V81M145 134H153M171 134H179" fill="none" stroke="#1E1B1A" stroke-width="3"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="blenderline-title blenderline-desc">
+<title id="blenderline-title">blenderline logo</title>
+<desc id="blenderline-desc">A bottle on conveyor rollers, half rendered object and half segmentation mask, printed as a risograph inside a point-up hexagon.</desc>
+<defs><clipPath id="blenderline-clip-1"><path d="M70 52L128 52L128 154L70 154Z"/></clipPath><clipPath id="blenderline-clip-2"><path d="M128 52L186 52L186 154L128 154Z"/></clipPath></defs>
+<path id="blenderline-paper" d="M180.56 36.964L221.259 60.462A23.72 23.72 0 0 1 233.119 81.004L233.119 174.996A23.72 23.72 0 0 1 221.259 195.538L139.86 242.534A23.72 23.72 0 0 1 116.14 242.534L34.741 195.538A23.72 23.72 0 0 1 22.881 174.996L22.881 81.004A23.72 23.72 0 0 1 34.741 60.462L116.14 13.466A23.72 23.72 0 0 1 139.86 13.466Z" fill="#F8F6F1"/>
+<g id="blenderline-motif">
+<path d="M114 62L142 62L142 86C142 96 160 99 160 116L160 148C160 151.314 157.314 154 154 154L102 154C98.686 154 96 151.314 96 148L96 116C96 99 114 96 114 86Z" fill="#FF6C2F" clip-path="url(#blenderline-clip-1)"/>
+<path d="M114 62L142 62L142 86C142 96 160 99 160 116L160 148C160 151.314 157.314 154 154 154L102 154C98.686 154 96 151.314 96 148L96 116C96 99 114 96 114 86Z" fill="#1E1B1A" clip-path="url(#blenderline-clip-2)"/>
+<path d="M65 154L191 154C201.493 154 210 162.507 210 173L210 173C210 183.493 201.493 192 191 192L65 192C54.507 192 46 183.493 46 173L46 173C46 162.507 54.507 154 65 154Z" fill="#1E1B1A"/>
+<path d="M85 173C85 179.075 80.075 184 74 184C67.925 184 63 179.075 63 173C63 166.925 67.925 162 74 162C80.075 162 85 166.925 85 173Z" fill="#F8F6F1"/>
+<path d="M139 173C139 179.075 134.075 184 128 184C121.925 184 117 179.075 117 173C117 166.925 121.925 162 128 162C134.075 162 139 166.925 139 173Z" fill="#FFB511"/>
+<path d="M193 173C193 179.075 188.075 184 182 184C175.925 184 171 179.075 171 173C171 166.925 175.925 162 182 162C188.075 162 193 166.925 193 173Z" fill="#F8F6F1"/>
 </g>
+<path id="blenderline-frame" d="M182.56 33.5L223.259 56.998A27.72 27.72 0 0 1 237.119 81.004L237.119 174.996A27.72 27.72 0 0 1 223.259 199.002L141.86 245.998A27.72 27.72 0 0 1 114.14 245.998L32.741 199.002A27.72 27.72 0 0 1 18.881 174.996L18.881 81.004A27.72 27.72 0 0 1 32.741 56.998L114.14 10.002A27.72 27.72 0 0 1 141.86 10.002ZM178.56 40.428L219.259 63.926A19.72 19.72 0 0 1 229.119 81.004L229.119 174.996A19.72 19.72 0 0 1 219.259 192.074L137.86 239.07A19.72 19.72 0 0 1 118.14 239.07L36.741 192.074A19.72 19.72 0 0 1 26.881 174.996L26.881 81.004A19.72 19.72 0 0 1 36.741 63.926L118.14 16.93A19.72 19.72 0 0 1 137.86 16.93Z" fill="#1E1B1A" fill-rule="evenodd"/>
 </svg>

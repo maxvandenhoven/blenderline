@@ -1,4 +1,4 @@
-<img src="assets/logo.svg" width="160" alt="BlenderLine logo">
+<img src="assets/logo.png" width="160" alt="BlenderLine logo">
 
 # BlenderLine
 
@@ -10,7 +10,9 @@ Each generated instance contains a rendered image and a separate mask for each p
 
 ## Background
 
-Collecting production-line images and labeling individual objects can take time, particularly when the dataset needs variations in lighting, backgrounds, and object placement. BlenderLine uses 3D models and a configurable scene to generate those variations together with their masks. This provides a way to build synthetic training data, though its usefulness on a real production line still needs to be evaluated with real images.
+BlenderLine explores generating production-line images together with their object masks. Gathering real images with enough variation in lighting, backgrounds, and object placement can take time, and so can labeling the objects in them. In a rendered scene the generator knows which objects it placed and where, so it can write a mask for each object alongside the image.
+
+A Blender scene defines the line, camera, and placement path, 3D models supply the objects, and a JSON configuration controls how often each object appears, how it is spaced, and how the scene is lit. The converters then turn the rendered images and masks into YOLO training formats. The generated masks and labels should still be inspected, and how useful this synthetic data is on a real production line needs to be evaluated with real images.
 
 ## Getting started
 
@@ -87,7 +89,7 @@ Each converter creates `images/<split>/`, `labels/<split>/`, and an `example_bee
 
 Use `--minarea` to filter small masks, with a default threshold of `0.005` of the image area. Detection measures foreground pixels, while segmentation measures contour area. For segmentation, `--eps-factor` controls polygon simplification and defaults to `0.005`. Larger values produce coarser polygons.
 
-Both conversion commands passed local smoke tests on a small, constructed image-and-mask fixture. Those tests checked labels, normalized coordinates, split metadata, small-mask filtering, and rejection of a nonempty target. They did not validate model training or a complete render-to-training pipeline.
+Both conversion commands have only been tried on a small constructed fixture of images and masks. That check covered labels, normalized coordinates, split metadata, small-mask filtering, and rejection of a nonempty target. It did not cover model training or a complete render-to-training pipeline.
 
 ## How it works
 
@@ -104,7 +106,7 @@ The [beer conveyor example](examples/example_beer/) shows how these pieces fit t
 
 ## Limitations
 
-- **Rendering is version-sensitive.** In a local CPU smoke test using a reduced version of the supplied example, Blender 5.2.2 raised `AttributeError: 'Scene' object has no attribute 'node_tree'` in compositor setup and produced no images. The earlier README's blanket “Blender 3.4+” claim should not be read as compatibility with every later release. A working Blender version still needs to be established for an end-to-end run.
+- **Rendering is version-sensitive.** In a local CPU smoke test using a reduced version of the supplied example, Blender 5.2.2 raised `AttributeError: 'Scene' object has no attribute 'node_tree'` in compositor setup and produced no images. Compatibility with newer Blender releases should not be assumed, and a working Blender version still needs to be established for an end-to-end run.
 - **An exit code alone does not confirm rendering succeeded.** The failed Blender smoke test returned exit code zero despite the Python traceback. Check the logs, output images, masks, and `label_mapping.json` before converting.
 - **Segmentation conversion has boundaries.** Disconnected contours from one object become separate label lines. The converter also retrieves nested contours without treating holes separately. Inspect occluded objects and masks with holes before relying on the labels for instance segmentation.
 - **YOLO metadata needs review.** The converter derives its dataset path from the target directory's last two path components and preserves JSON class keys as strings in YAML. Split names are recognized by the substrings `train`, `val`, and `test`. Check paths, class keys, and split assignments against your training tool rather than assuming any directory layout will work unchanged.
