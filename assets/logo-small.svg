@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+<title id="title">blenderline logo</title>
+<desc id="desc">A paper-filled rounded hexagonal project mark with flat print inks.</desc>
+<path d="M136 20L216 66Q224 70 224 80V176Q224 186 216 190L136 236Q128 240 120 236L40 190Q32 186 32 176V80Q32 70 40 66L120 20Q128 16 136 20Z" fill="#F8F6F1" stroke="#1E1B1A" stroke-width="5"/>
+<g stroke="#1E1B1A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+<rect x="60" y="144" width="136" height="34" rx="17" fill="#F8F6F1" stroke="#1E1B1A" stroke-width="5"/>
+<path d="M74 184V193M182 184V193" fill="none" stroke="#1E1B1A" stroke-width="5"/>
+<rect x="77" y="91" width="34" height="38" rx="4" fill="#FF6C2F" stroke="#1E1B1A" stroke-width="5"/>
+<rect x="145" y="91" width="34" height="38" rx="4" fill="#FFB511" stroke="#1E1B1A" stroke-width="5"/>
+<path d="M121 110H134M130 105L135 110L130 115" fill="none" stroke="#1E1B1A" stroke-width="3"/>
+<circle cx="78" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
+<circle cx="103" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
+<circle cx="128" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
+<circle cx="153" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
+<circle cx="178" cy="161" r="7" fill="#1E1B1A" stroke="none" stroke-width="5"/>
+<path d="M78 81V76H88M169 76H179V81M145 134H153M171 134H179" fill="none" stroke="#1E1B1A" stroke-width="3"/>
+</g>
+</svg>

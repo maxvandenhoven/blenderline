@@ -1,121 +1,131 @@
-<h1 align="center">
-  <img src="https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-light.svg?raw=true#gh-light-mode-only" width="300">
-  <img src="https://github.com/maxvandenhoven/blenderline/blob/main/img/logo-full-dark.svg?raw=true#gh-dark-mode-only" width="300">
-</h1>
+<img src="assets/logo.svg" width="160" alt="BlenderLine logo">
 
-[![GPLv3](https://img.shields.io/static/v1?message=GPLv3&color=blue&label=License&style=flat)](https://www.gnu.org/licenses/gpl-3.0)
-[![Python](https://img.shields.io/static/v1?message=3.10%2B&logo=python&color=blue&logoColor=white&label=Python&style=flat)](https://www.python.org/)
-[![Blender](https://img.shields.io/static/v1?message=3.4%2B&logo=blender&color=orange&logoColor=white&label=Blender&style=flat)](https://www.blender.org/)
-[![GPLv3](https://img.shields.io/static/v1?message=black&color=black&label=Code%20style&style=flat)](https://github.com/psf/black)
-[![Documentation Status](https://readthedocs.org/projects/blenderline/badge/?version=latest)](https://blenderline.readthedocs.io/en/latest/?badge=latest)
+# BlenderLine
 
-## 1. Table of Contents
-<details>
-<summary> Table of Contents </summary>
+BlenderLine generates synthetic images of production lines using Blender scenes and configuration files. It renders images alongside object masks, providing labels for computer vision tasks such as object detection and segmentation. The repository includes a bottle conveyor example and tools for converting generated data into YOLO training formats.
 
-- [1. Table of Contents](#1-table-of-contents)
-- [2. Description](#2-description)
-- [3. Overview](#3-overview)
-- [4. Features](#4-features)
-- [5. Installation](#5-installation)
-- [6. Usage](#6-usage)
-- [7. Roadmap](#7-roadmap)
+![A rendered bottle conveyor beside two object masks showing the visible parts of individual bottles](img/example-instance.png)
 
-</details>
+Each generated instance contains a rendered image and a separate mask for each placed object. The conveyor can obscure parts of a bottle, leaving disconnected regions in its mask.
 
+## Background
 
-## 2. Description
-BlenderLine is an open-source tool for generating synthetic image data for object detection, segmentation, and counting tasks in manufacturing settings. Leveraging 3D CAD models commonly found in manufacturing plants, BlenderLine automatically generates large and diverse datasets with pixel-perfect labels, reducing the time and effort traditionally required for manual data collection and annotation.
+Collecting production-line images and labeling individual objects can take time, particularly when the dataset needs variations in lighting, backgrounds, and object placement. BlenderLine uses 3D models and a configurable scene to generate those variations together with their masks. This provides a way to build synthetic training data, though its usefulness on a real production line still needs to be evaluated with real images.
 
+## Getting started
 
-## 3. Overview
-![](https://github.com/maxvandenhoven/blenderline/blob/main/img/workflow.png?raw=true)
+The package currently requires **Python 3.10**, not an arbitrary newer Python version. Rendering also requires a separate Blender installation with the `blender` command on your `PATH`, or a path supplied through `--blender`. Installing the Python package does not install that executable.
 
+**Blender compatibility needs care.** The renderer uses a legacy compositor API. A smoke test with Blender 5.2.2 failed before rendering, so the example below is a workflow reference, not a verified end-to-end setup for current Blender releases. See [Limitations](#limitations) before generating a dataset.
 
-## 4. Features
-- **Flexible**: BlenderLine imposes as little constraints on your 3D modeling workflow as possible, giving you the freedom to model your production line as you see fit.
-- **Declarative**: Instead of having to write the generation code yourself, BlenderLine enables you to define the desired behavior of objects on your production line using declarative configuration files. 
-- **Powerful**: Despite using declarative configuration files, BlenderLine is powerful enough to support a wide variety of use cases, ranging from narrow bottle counting lines (see `examples/example_beer`) to wide conveyor belts (example planned).
-- **Convenient**: BlenderLine includes tools to easily convert generated datasets into common computer vision dataset formats:
-  - `yolo_detection`
-  - `yolo_segmentation` (planned)
-  - `coco_detection` (planned)
-  - `coco_segmentation` (planned)
+### Install from source
 
+Run these commands with Python 3.10 available on your system.
 
-## 5. Installation
-The simplest way to install BlenderLine is using pip:
-```
-pip install blenderline
-```
-
-Alternatively, you can choose to clone the repository to make a local pip installation:
-```
-git clone https://github.com/maxvandenhoven/blenderline
+```sh
+git clone https://github.com/maxvandenhoven/blenderline.git
 cd blenderline
-pip install -e .
+python3.10 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e . requests
 ```
 
-Note that, by default, BlenderLine assumes that Blender is installed and available on your system `PATH`, meaning that the Blender CLI can be invoked using only the `blender` command. The platform-dependent documentation below can help you add Blender to your system `PATH`:
-- [Windows](https://docs.blender.org/manual/en/latest/advanced/command_line/launch/windows.html)
-- [MacOS](https://docs.blender.org/manual/en/latest/advanced/command_line/launch/macos.html)
-- [Linux](https://docs.blender.org/manual/en/latest/advanced/command_line/launch/linux.html)
+On Windows, activate the environment with `.venv\Scripts\activate` instead. The explicit `requests` dependency is needed because the CLI imports the example downloader at startup, but `setup.py` does not declare it. The package also declares a `bpy` dependency, whose wheel availability can constrain installation independently of the standalone Blender executable.
 
-Alternatively, you can use the optional `--blender` argument in `blenderline generate` to specify where Blender is installed on your system.
+### Generate the example
 
-## 6. Usage
-##### Generate Images
-The `blenderline generate` command is used to generate a dataset of synthetic images from a configuration file. You can test BlenderLine with the provided `examples/example_beer/images.json` example as follows:
-```
-blenderline generate --config examples/example_beer/images.json --target data/raw
-```
+The [example configuration](examples/example_beer/images.json) defines two training images and two validation images at 512 × 512 pixels. It uses two bottle models, background photographs, and HDR lighting assets included in the repository.
 
-This will generate a dataset with the following structure:
-```
-data/
-+- raw/
-   +- example_beer/
-      +- train/
-      |  +- 0/
-      |  |  +- image__f0825a6262fc__0001.png
-      |  |  +- mask__0__8acdea079f10__0001.png
-      |  |  +- mask__1__0181a303d637__0001.png
-      |  |  +- ...
-      |  +- 1/
-      |     +- image__7abe7f02c7d9__0001.png
-      |     +- mask__1__19abef8a5cef__0001.png
-      |     +- mask__1__d980d4a83682__0001.png
-      |     +- ...
-      +- valid/
-      |  +- 0/...
-      |  +- 1/...
-      +- label_mapping.json
+Before rendering, review the `scene` settings in that file. The example enables CUDA and uses 1,024 samples per image. Set `"render_use_cuda": false` for CPU rendering, and reduce `render_samples` for an initial test.
 
+```sh
+blenderline generate \
+  --config examples/example_beer/images.json \
+  --target data/raw
 ```
 
-While not strictly necessary, setting `--target data/raw` will create a folder structure that allows you to track different versions of the data, e.g., after using the `blenderline convert` command. 
+If Blender is not on your `PATH`, append `--blender /path/to/blender-directory`. This option takes the **directory containing the executable**, not the executable itself.
 
-Note that the dataset root folder (here named `example_beer`) contains subfolders for different splits defined in the configuration file. Each split contains a numbered list of instance folders, each containing a rendered image and a set of masks. An example instance might look as follows:
-![](https://github.com/maxvandenhoven/blenderline/blob/main/img/example-instance.png?raw=true)
+A successful run writes the dataset under `data/raw/example_beer`, with `train` and `valid` splits and a `label_mapping.json` file. Each numbered instance directory contains one image and its object masks.
 
-
-Image and mask files use the following naming convention:
+```text
+data/raw/example_beer/
+├── label_mapping.json
+├── train/
+│   ├── 0/
+│   │   ├── image__<image-id>__0001.png
+│   │   ├── mask__<class-id>__<mask-id>__0001.png
+│   │   └── ...
+│   └── 1/
+│       └── ...
+└── valid/
+    ├── 0/
+    │   └── ...
+    └── 1/
+        └── ...
 ```
-image__<random image ID>__0001.png
-mask__<class ID>__<random mask ID>__0001.png
+
+### Convert a dataset
+
+Both `yolo_detection` and `yolo_segmentation` are implemented and exposed by the CLI. Conversion operates on existing image and mask files and does not launch Blender.
+
+```sh
+blenderline convert \
+  --format yolo_detection \
+  --source data/raw/example_beer \
+  --target data/yolo_detection
+
+blenderline convert \
+  --format yolo_segmentation \
+  --source data/raw/example_beer \
+  --target data/yolo_segmentation
 ```
 
-###### Convert Dataset 
-Coming soon!
+The source must be the dataset root containing `label_mapping.json`, not its parent directory. Choose a separate target that does not exist or is empty, and keep it outside the source dataset. Conversion preserves the source unless you explicitly request `--remove`, which prompts before deleting it.
 
+Each converter creates `images/<split>/`, `labels/<split>/`, and an `example_beer.yaml` metadata file. Detection labels contain normalized bounding boxes, while segmentation labels contain normalized polygon coordinates. Review the YAML paths and class mapping in the training environment before using the output.
 
+Use `--minarea` to filter small masks, with a default threshold of `0.005` of the image area. Detection measures foreground pixels, while segmentation measures contour area. For segmentation, `--eps-factor` controls polygon simplification and defaults to `0.005`. Larger values produce coarser polygons.
 
-## 7. Roadmap
-| **Version**      | **Features**                                          |
-|------------------|-------------------------------------------------------|
-| v0.1.0 (current) | Image generation pipeline + CLI interface             |
-| v0.2.0           | YOLO detection conversion pipeline + CLI interface    |
-| v0.3.0           | Documentation + tutorial + second example             |
-| v0.4.0           | YOLO segmentation conversion pipeline + CLI interface |
-| v0.5.0           | COCO detection conversion pipeline + CLI interface    |
-| v0.6.0           | COCO segmentation conversion pipeline + CLI interface |
+Both conversion commands passed local smoke tests on a small, constructed image-and-mask fixture. Those tests checked labels, normalized coordinates, split metadata, small-mask filtering, and rejection of a nonempty target. They did not validate model training or a complete render-to-training pipeline.
+
+## How it works
+
+The workflow moves from scene assets to configuration, rendering, and conversion.
+
+1. **Prepare the scene and objects.** A scene `.blend` file supplies the production line, camera, placement path, and background object. Separate `.blend` files hold the objects to place on the line. The configured object names must match the Blender assets.
+2. **Describe the dataset in JSON.** Configuration sets split sizes, class labels, render settings, object frequencies, spacing, and lateral placement limits. Asset paths are resolved relative to the configuration file, which keeps a project's scene and supporting assets together.
+3. **Render images and masks.** The generator samples lighting and backgrounds, places objects along the configured path, and assigns each object a pass index. Blender's compositor uses those indices to write individual masks alongside the rendered image.
+4. **Convert the raw dataset.** The converters read the mask filenames and label mapping, calculate bounding boxes or contours, and copy images into the target dataset's split directories.
+
+![Diagram of the BlenderLine workflow from production-line assets and configuration to synthetic data](img/workflow.png)
+
+The [beer conveyor example](examples/example_beer/) shows how these pieces fit together. Its labels distinguish green and brown bottles, and its configuration controls how frequently each model appears. Start by adapting that project rather than assuming an arbitrary Blender scene can be rendered without preparation.
+
+## Limitations
+
+- **Rendering is version-sensitive.** In a local CPU smoke test using a reduced version of the supplied example, Blender 5.2.2 raised `AttributeError: 'Scene' object has no attribute 'node_tree'` in compositor setup and produced no images. The earlier README's blanket “Blender 3.4+” claim should not be read as compatibility with every later release. A working Blender version still needs to be established for an end-to-end run.
+- **An exit code alone does not confirm rendering succeeded.** The failed Blender smoke test returned exit code zero despite the Python traceback. Check the logs, output images, masks, and `label_mapping.json` before converting.
+- **Segmentation conversion has boundaries.** Disconnected contours from one object become separate label lines. The converter also retrieves nested contours without treating holes separately. Inspect occluded objects and masks with holes before relying on the labels for instance segmentation.
+- **YOLO metadata needs review.** The converter derives its dataset path from the target directory's last two path components and preserves JSON class keys as strings in YAML. Split names are recognized by the substrings `train`, `val`, and `test`. Check paths, class keys, and split assignments against your training tool rather than assuming any directory layout will work unchanged.
+- **COCO conversion is not implemented.** The available conversion formats are `yolo_detection` and `yolo_segmentation`. Neither COCO detection nor COCO segmentation is exposed by the CLI.
+- **Synthetic labels are not evidence of real-world accuracy.** Scene geometry, materials, lighting, and placement constraints determine the generated variation. Evaluate the resulting data against the production conditions and task you care about.
+
+## Development
+
+The CLI can also run directly from a checkout with `python -m blenderline.command_line`. These help commands describe the available arguments without starting a render or downloading assets.
+
+```sh
+blenderline --help
+blenderline generate --help
+blenderline convert --help
+blenderline download --help
+```
+
+Install the development dependencies with `python -m pip install -e '.[dev]' requests`. The [Makefile](Makefile) provides `make lint` for Flake8 and `make docs` for the Sphinx documentation. `make format` rewrites Python files with Black and isort.
+
+The [documentation source](docs/source/) contains the user guide and API and CLI references, although some guide pages are still placeholders. Implementation details live in [dataset settings](blenderline/settings/image.py), [generation](blenderline/generators/image.py), and the [converters](blenderline/scripts/python/converters/).
+
+## License
+
+BlenderLine is licensed under the GNU General Public License v3. See [LICENSE](LICENSE) for the terms.
