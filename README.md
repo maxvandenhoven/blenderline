@@ -1,4 +1,6 @@
+<p align="center">
 <img src="assets/logo.png" width="160" alt="BlenderLine logo">
+</p>
 
 # BlenderLine
 
